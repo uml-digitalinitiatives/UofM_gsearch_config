@@ -41,6 +41,14 @@
 
     <xsl:variable name="query_results">
       <xsl:call-template name="_traverse_graph">
+        <!--Provide the pid as a starting point, wrapped as a sparql result.-->
+        <xsl:with-param name="to_traverse_in">
+          <sparql:result>
+            <sparql:obj>
+              <xsl:attribute name="uri"><xsl:value-of select="$FULL_PID"/></xsl:attribute>
+            </sparql:obj>
+          </sparql:result>
+        </xsl:with-param>
         <xsl:with-param name="lang">sparql</xsl:with-param>
         <xsl:with-param name="risearch">http://fedoraAdmin:h3ll0G00dby3@localhost:8080/fedora/risearch</xsl:with-param>
         <xsl:with-param name="query" select="$new_query"/>
