@@ -34,14 +34,14 @@
     <xsl:variable name="difference" select="xalan:nodeset(set:difference($traverse, $traversed))"/>
     <xsl:if test="$debug">
       <xsl:message>Difference:
-        <xsl:value-of select="count($difference/res:result/res:obj)"/>
+        <xsl:value-of select="count($difference/res:result)"/>
         <xsl:for-each select="$difference//*[@uri]">
           <xsl:value-of select="name()"/>:<xsl:value-of select="@uri"/>
         </xsl:for-each>
       </xsl:message>
     </xsl:if>
     <xsl:choose>
-      <xsl:when test="count($difference/res:result/res:obj) = 0">
+      <xsl:when test="count($difference/res:result) = 0">
         <!-- There is nothing to traverse which has not already been traversed... -->
         <xsl:if test="$debug">
           <xsl:message>
@@ -51,41 +51,37 @@
             </xsl:for-each>
           </xsl:message>
         </xsl:if>
-        <xsl:copy-of select="$traversed/res:result/res:obj"/>
-            </xsl:when>
-            <xsl:otherwise>
+        <xsl:copy-of select="$traversed/res:result"/>
+      </xsl:when>
+      <xsl:otherwise>
         <xsl:variable name="to_traverse">
-          <res:result>
-            <xsl:for-each select="$difference/res:result/res:obj">
-              <xsl:if test="$debug">
-          <xsl:message>diff: <xsl:value-of select="@uri"/></xsl:message>
-              </xsl:if>
-              <xsl:variable name="new_query">
-                <xsl:call-template name="_recursive_string_replace">
-                  <xsl:with-param name="string" select="$query"/>
-                  <xsl:with-param name="find" select="'%PID_URI%'" />
-                  <xsl:with-param name="replace" select="@uri" />
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:variable name="query_results">
-          <xsl:call-template name="perform_traversal_query">
-            <xsl:with-param name="risearch" select="$risearch"/>
-            <xsl:with-param name="query" select="$new_query" />
-            <xsl:with-param name="lang">sparql</xsl:with-param>
-          </xsl:call-template>
-              </xsl:variable>
-              <xsl:copy-of select="xalan:nodeset($query_results)/res:sparql/res:results/res:result/res:obj"/>
-            </xsl:for-each>
-          </res:result>
+          <xsl:for-each select="$difference/res:result">
+            <xsl:if test="$debug">
+              <xsl:message>diff: <xsl:value-of select="@uri"/></xsl:message>
+            </xsl:if>
+            <xsl:variable name="new_query">
+              <xsl:call-template name="_recursive_string_replace">
+                <xsl:with-param name="string" select="$query"/>
+                <xsl:with-param name="find" select="'%PID_URI%'" />
+                <xsl:with-param name="replace" select="res:obj/@uri" />
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="query_results">
+              <xsl:call-template name="perform_traversal_query">
+                <xsl:with-param name="risearch" select="$risearch"/>
+                <xsl:with-param name="query" select="$new_query" />
+                <xsl:with-param name="lang">sparql</xsl:with-param>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:copy-of select="xalan:nodeset($query_results)/res:sparql/res:results/res:result"/>
+          </xsl:for-each>
         </xsl:variable>
   
         <xsl:call-template name="_traverse_graph">
           <xsl:with-param name="risearch" select="$risearch"/>
           <xsl:with-param name="to_traverse_in" select="set:distinct(xalan:nodeset($to_traverse))"/>
           <xsl:with-param name="traversed_in">
-            <res:result>
-              <xsl:copy-of select="$traversed/res:result/res:obj | $difference/res:result/res:obj"/>
-            </res:result>
+            <xsl:copy-of select="$traversed/res:result | $difference/res:result"/>
           </xsl:with-param>
           <xsl:with-param name="query" select="$query"/>
         </xsl:call-template>
