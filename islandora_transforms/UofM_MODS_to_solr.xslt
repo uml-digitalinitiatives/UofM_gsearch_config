@@ -342,10 +342,54 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 </xsl:if>
             </xsl:for-each>
         </xsl:element>
+
+        <xsl:variable name="nameVal">
+          <xsl:choose>
+              <xsl:when test="m:namePart[@type='family'] or m:namePart[@type='given']">
+                  <xsl:if test="m:namePart[@type='family']">
+                      <xsl:value-of select="normalize-space(m:namePart[@type='family'])" />
+                  </xsl:if>
+                  <xsl:if test="m:namePart[@type='given']">
+                      <xsl:if test="normalize-space(m:namePart[@type='family'])">
+                          <xsl:text>, </xsl:text>
+                      </xsl:if>
+                      <xsl:value-of select="normalize-space(m:namePart[@type='given'])" />
+                  </xsl:if>
+                  <xsl:if test="m:namePart[@type='date']">
+                      <xsl:text>, </xsl:text>
+                      <xsl:value-of select="normalize-space(m:namePart[@type='date'])" />
+                  </xsl:if>
+              </xsl:when>
+              <!-- if only namePart no specific family or given name tags -->
+              <xsl:otherwise>
+                  <xsl:choose>
+                      <xsl:when test="m:namePart != ''">
+                          <xsl:for-each select="m:namePart">
+                              <xsl:value-of select="." />
+                              <xsl:if test="position()!=last()">
+                                  <xsl:text>, </xsl:text>
+                              </xsl:if>
+                          </xsl:for-each>
+                      </xsl:when>
+                      <!-- if only displayForm -->
+                      <xsl:otherwise>
+                          <xsl:if test="m:displayForm != ''">
+                              <xsl:for-each select="m:displayForm">
+                                  <xsl:value-of select="." />
+                                  <xsl:if test="position()!=last()">
+                                      <xsl:text>, </xsl:text>
+                                  </xsl:if>
+                              </xsl:for-each>
+                          </xsl:if>
+                      </xsl:otherwise>
+                  </xsl:choose>
+              </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <xsl:element name="field">
             <xsl:attribute name="name">
                 <xsl:choose>
-                    <xsl:when test="@type='organization'">
+                    <xsl:when test="@type='organization' or @type='corporate'">
                         <xsl:text>name_organization_facet_ms</xsl:text>
                     </xsl:when>
                     <xsl:when test="@type='conference'">
@@ -356,48 +400,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     </xsl:when>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:choose>
-                <xsl:when test="m:namePart[@type='family'] or m:namePart[@type='given']">
-                    <xsl:if test="m:namePart[@type='family']">
-                        <xsl:value-of select="normalize-space(m:namePart[@type='family'])" />
-                    </xsl:if>
-                    <xsl:if test="m:namePart[@type='given']">
-                        <xsl:if test="normalize-space(m:namePart[@type='family'])">
-                            <xsl:text>, </xsl:text>
-                        </xsl:if>
-                        <xsl:value-of select="normalize-space(m:namePart[@type='given'])" />
-                    </xsl:if>
-                    <xsl:if test="m:namePart[@type='date']">
-                        <xsl:text>, </xsl:text>
-                        <xsl:value-of select="normalize-space(m:namePart[@type='date'])" />
-                    </xsl:if>
-                </xsl:when>
-                <!-- if only namePart no specific family or given name tags -->
-                <xsl:otherwise>
-                    <xsl:choose>
-                        <xsl:when test="m:namePart != ''">
-                            <xsl:for-each select="m:namePart">
-                                <xsl:value-of select="." />
-                                <xsl:if test="position()!=last()">
-                                    <xsl:text>, </xsl:text>
-                                </xsl:if>
-                            </xsl:for-each>
-                        </xsl:when>
-                        <!-- if only displayForm -->
-                        <xsl:otherwise>
-                            <xsl:if test="m:displayForm != ''">
-                                <xsl:for-each select="m:displayForm">
-                                    <xsl:value-of select="." />
-                                    <xsl:if test="position()!=last()">
-                                        <xsl:text>, </xsl:text>
-                                    </xsl:if>
-                                </xsl:for-each>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:otherwise>
-            </xsl:choose>
+          <xsl:value-of select="$nameVal" />
         </xsl:element>
+        <!-- 2014-07-18 : whikloj - Also add names to the subject_name_facet -->
+        <field name="subject_name_facet_ms"><xsl:value-of select="$nameVal" /></field>
     </xsl:template>
     <xsl:template match="m:subject">
         <xsl:variable name="topic" select="m:topic|m:occupation|m:titleInfo" />

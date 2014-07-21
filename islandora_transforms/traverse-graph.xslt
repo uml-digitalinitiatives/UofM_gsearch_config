@@ -6,7 +6,7 @@
         xmlns:set="http://exslt.org/sets"
         xmlns:encoder="xalan://java.net.URLEncoder">
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-  <xsl:param name="debug" select="true()"/>
+  <xsl:param name="debug" select="true"/>
 
   <!-- traverse the graph -->
   <xsl:template name="_traverse_graph">
@@ -57,7 +57,7 @@
         <xsl:variable name="to_traverse">
           <xsl:for-each select="$difference/res:result">
             <xsl:if test="$debug">
-              <xsl:message>diff: <xsl:value-of select="@uri"/></xsl:message>
+              <xsl:message>diff: <xsl:value-of select="res:obj/@uri"/></xsl:message>
             </xsl:if>
             <xsl:variable name="new_query">
               <xsl:call-template name="_recursive_string_replace">

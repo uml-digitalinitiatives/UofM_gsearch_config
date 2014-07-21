@@ -13,30 +13,28 @@
     <!--Construct the full pid uri-->
     <xsl:variable name="FULL_PID" select="concat('info:fedora/',$PID)"/>
 
-    <xsl:variable name="new_query">
-      <xsl:call-template name="_recursive_string_replace">
-        <xsl:with-param name='string'>
-          PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
-          PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
-          SELECT ?obj ?title
-          FROM &lt;#ri&gt;
-          WHERE {
-            {
-              &lt;%PID_URI%&gt; fre:isMemberOfCollection ?obj .
-              OPTIONAL {
-                ?obj fm:label ?title .
-              }
-            }
-            UNION {
-              &lt;%PID_URI%&gt; fre:isMemberOf ?obj
-            }
-            ?obj fm:state fm:Active .
-            &lt;%PID_URI%&gt; fm:state fm:Active .
+    <xsl:variable name="query">
+      PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
+      PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
+      SELECT ?obj ?title ?model
+      FROM &lt;#ri&gt;
+      WHERE {
+        {
+          &lt;%PID_URI%&gt; fre:isMemberOfCollection ?obj .
+          OPTIONAL {
+            ?obj fm:label ?title .
           }
-        </xsl:with-param>
-        <xsl:with-param name="find">%PID_URI%</xsl:with-param>
-        <xsl:with-param name="replace" select="$FULL_PID"/>
-      </xsl:call-template>
+        }
+        UNION {
+          &lt;%PID_URI%&gt; fre:isMemberOf ?obj
+        }
+        ?obj fm:state fm:Active .
+        &lt;%PID_URI%&gt; fm:state fm:Active ;
+         fm:hasModel ?model .
+        FILTER (
+           regex(str(?model), 'info:fedora/islandora:')
+        )
+      }
     </xsl:variable>
 
     <xsl:variable name="query_results">
@@ -51,14 +49,16 @@
         </xsl:with-param>
         <xsl:with-param name="lang">sparql</xsl:with-param>
         <xsl:with-param name="risearch">http://fedoraAdmin:h3ll0G00dby3@localhost:8080/fedora/risearch</xsl:with-param>
-        <xsl:with-param name="query" select="$new_query"/>
+        <xsl:with-param name="query" select="$query"/>
       </xsl:call-template>
     </xsl:variable>
     
     <xsl:for-each select="xalan:nodeset($query_results)//sparql:result">
       <xsl:if test="sparql:obj/@uri != $FULL_PID">
-        <field name="ancestors_ms"><xsl:value-of select="substring-after(sparql:obj/@uri, '/')"/></field>
-        <xsl:if test="string-length(sparql:title) &gt; 0 and substring-after(sparql:obj/@uri, '/') != 'uofm:top'">
+        <xsl:if test="preceding-sibling::node()/sparql:obj/@uri != sparql:obj/@uri">
+          <field name="ancestors_ms"><xsl:value-of select="substring-after(sparql:obj/@uri, '/')"/></field>
+        </xsl:if>
+        <xsl:if test="string-length(sparql:title) &gt; 0 and substring-after(sparql:model/@uri, '/') != 'islandora:collectionCModel'">
           <field name="collection_title_ms"><xsl:value-of select="sparql:title"/></field>
         </xsl:if>
       </xsl:if>
