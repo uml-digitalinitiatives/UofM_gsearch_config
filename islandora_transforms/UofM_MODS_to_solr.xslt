@@ -354,6 +354,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     <xsl:when test="@type='personal'">
                         <xsl:text>name_personal_facet_ms</xsl:text>
                     </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:text>name_personal_mt</xsl:text>
+                      <xsl:message>mods:name@type check failed, using default name_personal_mt</xsl:message>
+                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
             <xsl:choose>
