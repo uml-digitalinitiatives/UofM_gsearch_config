@@ -282,7 +282,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <xsl:element name="field">
             <xsl:attribute name="name">
                 <xsl:choose>
-                    <xsl:when test="@type='organization'">
+                    <xsl:when test="@type='organization' or @type='corporate'">
                         <xsl:text>name_organization_mt</xsl:text>
                     </xsl:when>
                     <xsl:when test="@type='conference'">
@@ -291,6 +291,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     <xsl:when test="@type='personal'">
                         <xsl:text>name_personal_mt</xsl:text>
                     </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:test>name_personal_mt</xsl:text>
+                        <xsl:message>mods:name@type (<xsl:value-of select="@type"/>) check failed using default name_personal_mt</xsl:message>
+                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
             <xsl:choose>
