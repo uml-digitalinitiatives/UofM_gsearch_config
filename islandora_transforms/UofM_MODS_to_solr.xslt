@@ -292,7 +292,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                         <xsl:text>name_personal_mt</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:test>name_personal_mt</xsl:text>
+                        <xsl:text>name_personal_mt</xsl:text>
                         <xsl:message>mods:name@type (<xsl:value-of select="@type"/>) check failed using default name_personal_mt</xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
