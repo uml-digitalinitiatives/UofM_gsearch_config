@@ -7,7 +7,6 @@
      
   <xsl:template name="get_ISO8601_date">
     <xsl:param name="date"/>
-    <xsl:message><xsl:value-of select="$date"/></xsl:message>
       
     <xsl:variable name="pattern1">
       <xsl:variable name="frac">([.,][0-9]+)</xsl:variable>

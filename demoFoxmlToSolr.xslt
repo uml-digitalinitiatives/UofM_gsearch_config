@@ -81,7 +81,7 @@
   <!--
   <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/hierarchy.xslt"/>
   -->
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/UofM-hierarchy.xslt"/>
+  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/hierarchy.xslt"/>
 
   <!--<xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/PB_to_solr.xslt"/> -->
   <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/UofM_PB_to_solr.xslt"/>
@@ -159,19 +159,10 @@
         </xsl:choose>
       </xsl:for-each>
 
-      <!--Get the ancestor list-->
-      <xsl:variable name="ancestors">
-        <xsl:call-template name="get-ancestors">
-          <xsl:with-param name="PID" select="/foxml:digitalObject/@PID" />
-        </xsl:call-template>
-      </xsl:variable>
-
-      <!--Iterate over the results of the traversal and construct the field tags for the solr update doc-->
-      <xsl:for-each select="xalan:nodeset($ancestors)//sparql:obj">
-        <xsl:if test="@uri != concat('info:fedora/', $PID)">
-          <field name="ancestors_ms"><xsl:value-of select="substring-after(@uri, '/')"/></field>
-        </xsl:if>
-      </xsl:for-each>
+      <!--Get the ancestors and collections list-->
+      <xsl:call-template name="get-ancestors-and-collections">
+        <xsl:with-param name="PID" select="/foxml:digitalObject/@PID" />
+      </xsl:call-template>
 
       <!-- this is an example of using template modes to have multiple ways of indexing the same stream -->
       <!--
