@@ -45,7 +45,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="asdf" select="string($parsed)"/>
-    <xsl:message><xsl:value-of select="$asdf"/></xsl:message>
+    <!--<xsl:message><xsl:value-of select="$asdf"/></xsl:message>-->
     <xsl:choose>
     <xsl:when test="java:matches($asdf, $pattern1)">
       <xsl:variable name="dp" select="java:org.joda.time.format.ISODateTimeFormat.dateTimeParser()"/>
