@@ -19,15 +19,15 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:tei="http://www.tei-c.org/ns/1.0"
   xmlns:mods="http://www.loc.gov/mods/v3"
-  xmlns:exts="xalan://dk.defxws.fedoragsearch.server.GenericOperationsImpl"
+  xmlns:gsearch="xalan://dk.defxws.fedoragsearch.server.GenericOperationsImpl"
   xmlns:islandora-exts="xalan://ca.upei.roblib.DataStreamForXSLT"
   xmlns:sparql="http://www.w3.org/2001/sw/DataAccess/rf1/result"
   xmlns:set="http://exslt.org/sets"
   xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="exts"
+  exclude-result-prefixes="gsearch"
   xmlns:encoder="xalan://java.net.URLEncoder">
 
-  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+  <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
   <!-- gsearch magik @TODO: see if any of the explicit variables can be replaced by these -->
   <xsl:param name="REPOSITORYNAME" select="repositoryName"/>
@@ -61,30 +61,32 @@
      
      <!-- older gsearches (slurp_all_MODS_to_solr also contains an include that would need to be
      altered if you use these)-->
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/DC_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/RELS-EXT_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/RELS-INT_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/FOXML_properties_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/datastream_id_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/DC_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/RELS-EXT_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/RELS-INT_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/FOXML_properties_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/datastream_id_to_solr.xslt"/>
   <!--
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/slurp_all_MODS_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/MODS_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/slurp_all_MODS_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/MODS_to_solr.xslt"/>
   -->
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/UofM_MODS_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/UofM_MODS_to_solr.xslt"/>
   <!--
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/EACCPF_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/TEI_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/EACCPF_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/TEI_to_solr.xslt"/>
   -->
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/text_to_solr.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/XML_to_one_solr_field.xslt"/>
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/XML_text_nodes_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/text_to_solr.xslt"/>
+  <xsl:include href="islandora_transforms/XML_to_one_solr_field.xslt"/>
+  <xsl:include href="islandora_transforms/XML_text_nodes_to_solr.xslt"/>
   <!--
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/hierarchy.xslt"/>
+  <xsl:include href="islandora_transforms/hierarchy.xslt"/>
   -->
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/hierarchy.xslt"/>
+  <xsl:include href="islandora_transforms/hierarchy.xslt"/>
 
-  <!--<xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/PB_to_solr.xslt"/> -->
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/UofM_PB_to_solr.xslt"/>
+  <!--<xsl:include href="islandora_transforms/PB_to_solr.xslt"/> -->
+  <xsl:include href="islandora_transforms/UofM_PB_to_solr.xslt"/>
+
+  <xsl:include href="islandora_transforms/UofM_custom_facets.xslt" />
 
   <!-- Decide which objects to modify the index of -->
   <xsl:template match="/">
@@ -153,7 +155,7 @@
               other mimetypes should not be being sent
               will this let us not use the content variable? -->
             <xsl:apply-templates select="foxml:datastreamVersion[last()]">
-              <xsl:with-param name="content" select="normalize-space(exts:getDatastreamText($PID, $REPOSITORYNAME, @ID, $FEDORASOAP, $FEDORAUSER, $FEDORAPASS, $TRUSTSTOREPATH, $TRUSTSTOREPASS))"/>
+              <xsl:with-param name="content" select="normalize-space(gsearch:getDatastreamText($PID, $REPOSITORYNAME, @ID, $FEDORASOAP, $FEDORAUSER, $FEDORAPASS, $TRUSTSTOREPATH, $TRUSTSTOREPASS))"/>
             </xsl:apply-templates>
           </xsl:when>
         </xsl:choose>

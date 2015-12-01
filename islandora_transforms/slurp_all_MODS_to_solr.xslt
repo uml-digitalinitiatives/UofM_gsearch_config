@@ -6,8 +6,8 @@
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:mods="http://www.loc.gov/mods/v3"
      exclude-result-prefixes="mods">
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/config/index/gsearch_solr/islandora_transforms/library/xslt-date-template.xslt"/>
-  <!-- <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/library/xslt-date-template.xslt"/>-->
+  <xsl:include href="/var/lib/tomcat/webapps/fedoragsearch/WEB-INF/classes/config/index/gsearch_solr/islandora_transforms/library/xslt-date-template.xslt"/>
+  <!-- <xsl:include href="/var/lib/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/library/xslt-date-template.xslt"/>-->
   
   <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS_slurp">
     <xsl:param name="content"/>

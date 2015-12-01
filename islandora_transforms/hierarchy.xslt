@@ -3,7 +3,7 @@
   xmlns:sparql="http://www.w3.org/2001/sw/DataAccess/rf1/result"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/traverse-graph.xslt"/>
+  <xsl:include href="islandora_transforms/traverse-graph.xslt"/>
 
   <!-- Pull both ancestors and Parent Collections -->
   <xsl:template name="get-ancestors-and-collections">

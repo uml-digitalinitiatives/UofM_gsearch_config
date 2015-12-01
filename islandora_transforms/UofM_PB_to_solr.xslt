@@ -5,7 +5,7 @@
     exclude-result-prefixes="pb">
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-    <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/gsearch_solr/islandora_transforms/library/xslt-string-functions.xslt"/>
+    <xsl:include href="islandora_transforms/library/xslt-string-functions.xslt"/>
     
     <xsl:template match="foxml:datastream[@ID='PBCORE']/foxml:datastreamVersion[last()]"
         name="index_PBCORE">
