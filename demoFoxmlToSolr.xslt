@@ -24,7 +24,8 @@
   xmlns:sparql="http://www.w3.org/2001/sw/DataAccess/rf1/result"
   xmlns:set="http://exslt.org/sets"
   xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="gsearch"
+  xmlns:string="xalan://java.lang.String"
+  exclude-result-prefixes="gsearch string encoder"
   xmlns:encoder="xalan://java.net.URLEncoder">
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
@@ -43,7 +44,9 @@
   <xsl:variable name="PORT">8080</xsl:variable>
   <xsl:variable name="PID" select="/foxml:digitalObject/@PID"/>
 
-
+  <!-- Invalid XML Characters -->
+  <xsl:variable name="PATTERN" select="'[^\u0009\u000A\u000D\u0020-\uD7FF\uE000-\uFFFD\u10000-\u10FFF]+'"/>
+  
   <!--
   This xslt stylesheet generates the IndexDocument consisting of IndexFields
     from a FOXML record. The IndexFields are:
@@ -155,7 +158,7 @@
               other mimetypes should not be being sent
               will this let us not use the content variable? -->
             <xsl:apply-templates select="foxml:datastreamVersion[last()]">
-              <xsl:with-param name="content" select="normalize-space(gsearch:getDatastreamText($PID, $REPOSITORYNAME, @ID, $FEDORASOAP, $FEDORAUSER, $FEDORAPASS, $TRUSTSTOREPATH, $TRUSTSTOREPASS))"/>
+              <xsl:with-param name="content" select="normalize-space(string:replaceAll(gsearch:getDatastreamText($PID, $REPOSITORYNAME, @ID, $FEDORASOAP, $FEDORAUSER, $FEDORAPASS, $TRUSTSTOREPATH, $TRUSTSTOREPASS), $PATTERN, ''))"/>
             </xsl:apply-templates>
           </xsl:when>
         </xsl:choose>
