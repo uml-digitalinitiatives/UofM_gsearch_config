@@ -7,16 +7,6 @@
   xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
   xmlns:dc="http://purl.org/dc/elements/1.1/">
 
-  <xsl:template match="foxml:datastream[@ID='DC' or @ID='QDC']/foxml:datastreamVersion[last()]">
-    <xsl:param name="content"/>
-    <xsl:param name="prefix">dc.</xsl:param>
-    <xsl:param name="suffix"></xsl:param>
-    <xsl:apply-templates select="$content/oai_dc:dc">
-      <xsl:with-param name="prefix" select="$prefix"/>
-      <xsl:with-param name="suffix" select="$suffix"/>
-    </xsl:apply-templates>
-  </xsl:template>
-
   <xsl:template match="oai_dc:dc">
     <xsl:param name="prefix">dc.</xsl:param>
     <xsl:param name="suffix"></xsl:param>

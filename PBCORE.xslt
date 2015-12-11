@@ -5,8 +5,10 @@
     exclude-result-prefixes="pb">
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-    <xsl:include href="islandora_transforms/library/xslt-string-functions.xslt"/>
-    
+    <xsl:include href="library/xslt-string-functions.xslt"/>
+
+    <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
+
     <xsl:template match="foxml:datastream[@ID='PBCORE']/foxml:datastreamVersion[last()]"
         name="index_PBCORE">
         <xsl:param name="content"/>
@@ -18,11 +20,9 @@
         </xsl:apply-templates>
     </xsl:template>
 
-
-
     <xsl:template match="pb:pbcoreDescriptionDocument">
-        <xsl:param name="prefix"/>
-        <xsl:param name="suffix"/>
+        <xsl:param name="prefix">pb_</xsl:param>
+        <xsl:param name="suffix">_ms</xsl:param>
         
         <xsl:for-each select="*[count(*) = 0]">
             <xsl:call-template name="field_auto">
@@ -65,8 +65,6 @@
             
                 
         </xsl:for-each>
-        
-        
         
         <xsl:call-template name="field">
             <xsl:with-param name="name">
@@ -269,5 +267,5 @@
       </xsl:if>
     </xsl:template>
 
+    <xsl:template match="text()"/>
 </xsl:stylesheet>
-

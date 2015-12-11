@@ -28,18 +28,20 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   xmlns:m="http://www.loc.gov/mods/v3"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#">
   
-  <xsl:include href="islandora_transforms/library/xslt-date-template.xslt"/>
+  <xsl:include href="library/xslt-date-template.xslt"/>
+  
+  <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
-    <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS">
-      <xsl:param name="content"/>
-      <xsl:param name="prefix">mods_</xsl:param>
-      <xsl:param name="suffix">_ms</xsl:param>
+  <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS">
+    <xsl:param name="content"/>
+    <xsl:param name="prefix">mods_</xsl:param>
+    <xsl:param name="suffix">_ms</xsl:param>
 
-      <xsl:apply-templates select="$content/m:mods">
-        <xsl:with-param name="prefix" select="$prefix"/>
-        <xsl:with-param name="suffix" select="$suffix"/>
-      </xsl:apply-templates>
-    </xsl:template>
+    <xsl:apply-templates select="$content/m:mods">
+      <xsl:with-param name="prefix" select="$prefix"/>
+      <xsl:with-param name="suffix" select="$suffix"/>
+    </xsl:apply-templates>
+  </xsl:template>
 
   <!-- This is a recursive template that will concatenate
     all the local names of parents of the supplied node.
@@ -903,4 +905,6 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
 
     </xsl:template>
 
+    <xsl:template match="text()"/>
+    
 </xsl:stylesheet>
