@@ -10,6 +10,4 @@
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
-  <xsl:variable name="DSID">RELS-INT</xsl:variable>
-
 </xsl:stylesheet>

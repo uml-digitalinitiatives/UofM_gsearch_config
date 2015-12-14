@@ -9,7 +9,9 @@
       will probably need to have many templates match and feed into one?
       this file would then be re-named match all text datastreams
   -->
-  <xsl:template match="OCR|TEXT|FULL_TEXT">
+  <xsl:param name="DSID"/>
+  
+  <xsl:template match="OCR|TEXT|FULL_TEXT" name="plain-text">
     <field>
       <xsl:attribute name="name">
         <xsl:value-of select="concat($DSID, '_t')"/>

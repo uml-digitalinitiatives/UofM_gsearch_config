@@ -26,7 +26,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:m="http://www.loc.gov/mods/v3"
-  xmlns:foxml="info:fedora/fedora-system:def/foxml#">
+  xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+  exclude-result-prefixes="foxml m">
   
   <xsl:include href="library/xslt-date-template.xslt"/>
   

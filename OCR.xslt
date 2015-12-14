@@ -9,7 +9,5 @@
   <xsl:include href="plain-text.xslt"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
-  
-  <xsl:variable name="DSID">OCR</xsl:variable>
 
 </xsl:stylesheet>

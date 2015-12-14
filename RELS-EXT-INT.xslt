@@ -4,9 +4,11 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     exclude-result-prefixes="rdf">
+     exclude-result-prefixes="rdf foxml">
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
+
+  <xsl:param name="DSID"/>
 
   <xsl:template match="rdf:RDF">
     <xsl:param name="prefix" select="concat(translate($DSID, '-', '_'),'_')"/>
