@@ -42,6 +42,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
       <xsl:with-param name="prefix" select="$prefix"/>
       <xsl:with-param name="suffix" select="$suffix"/>
     </xsl:apply-templates>
+    <xsl:apply-templates select="$content/m:mods/m:extension/m:dateCreated" mode="date_facet" />
   </xsl:template>
 
   <!-- This is a recursive template that will concatenate
@@ -695,6 +696,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:when>
             <xsl:when test="$date_issued">
                 <xsl:for-each select="$date_issued">
+                    <!-- also make a mods_custom_date_facet -->
+                    <xsl:apply-templates select="$date_issued" mode="date_facet"/>
                     <xsl:element name="field">
                         <xsl:attribute name="name">raw_date</xsl:attribute>
                         <xsl:choose>
@@ -905,6 +908,18 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         </xsl:for-each>
 
     </xsl:template>
+
+    <xsl:template match="m:dateCreated|m:dateIssued" mode="date_facet">
+      <xsl:if test="string-length(normalize-space(text())) &gt; 0">
+        <xsl:element name="field">
+          <xsl:attribute name="name">mods_custom_date_facet_mdt</xsl:attribute>
+          <xsl:call-template name="get_ISO8601_date">
+            <xsl:with-param name="date" select="normalize-space(text())"/>
+          </xsl:call-template>
+       </xsl:element>
+     </xsl:if>
+    </xsl:template>
+
 
     <xsl:template match="text()"/>
     

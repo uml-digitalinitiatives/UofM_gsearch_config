@@ -7,6 +7,8 @@
    
    <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
    
+   <xsl:include href="library/hierarchy.xslt" />
+   
    <xsl:param name="pid"/>
      
    <xsl:template match="foxml:digitalObject">
@@ -19,6 +21,12 @@
           <xsl:value-of select="@ID"/>
       </field>
     </xsl:for-each>
+    
+    <!-- Get ancestors -->
+    <xsl:call-template name="get-ancestors-and-collections">
+      <xsl:with-param name="PID" select="$pid" />
+    </xsl:call-template>
+    
   </xsl:template>
      
      
