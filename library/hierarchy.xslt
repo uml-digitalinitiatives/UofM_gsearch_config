@@ -53,7 +53,7 @@
           </sparql:result>
         </xsl:with-param>
         <xsl:with-param name="lang">sparql</xsl:with-param>
-        <xsl:with-param name="risearch"><xsl:value-of select="concat($PROT, '://', $FEDORAUSER, ':', $FEDORAPASS, '@', $HOST, ':', $PORT, '/fedora/risearch')"/></xsl:with-param>
+        <xsl:with-param name="risearch"><xsl:value-of select="concat($PROT, '://', $FEDORAUSER, ':', $FEDORAPASS, '@', $FEDORAURL, $FEDORAPATH, '/risearch')"/></xsl:with-param>
         <xsl:with-param name="query" select="$query"/>
       </xsl:call-template>
     </xsl:variable>

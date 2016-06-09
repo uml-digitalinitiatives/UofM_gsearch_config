@@ -10,6 +10,12 @@
    <xsl:include href="library/hierarchy.xslt" />
    
    <xsl:param name="pid"/>
+   <xsl:param name="FEDORAUSER"/>
+   <xsl:param name="FEDORAPASS"/>
+   <xsl:param name="FEDORAURL">localhost:8080</xsl:param>
+   <xsl:param name="FEDORAPATH">/fedora</xsl:param>
+
+   <xsl:variable name="PROT">http</xsl:variable>
      
    <xsl:template match="foxml:digitalObject">
      <field name="PID"><xsl:value-of select="$pid"/></field>
