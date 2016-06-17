@@ -9,5 +9,9 @@
   <xsl:include href="plain-text.xslt"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
+  
+  <xsl:template match="/">
+      <xsl:apply-templates />
+  </xsl:template>
 
 </xsl:stylesheet>
