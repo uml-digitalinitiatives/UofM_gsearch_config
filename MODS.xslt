@@ -33,6 +33,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
+<!-- This is left over from the one stylesheet to rule them all format
   <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS">
     <xsl:param name="content"/>
     <xsl:param name="prefix">mods_</xsl:param>
@@ -42,8 +43,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
       <xsl:with-param name="prefix" select="$prefix"/>
       <xsl:with-param name="suffix" select="$suffix"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="$content/m:mods/m:extension/m:dateCreated" mode="date_facet" />
+    <xsl:apply-templates select="m:mods/m:extension/m:dateCreated" mode="date_facet" />
   </xsl:template>
+  -->
 
   <!-- This is a recursive template that will concatenate
     all the local names of parents of the supplied node.
@@ -59,11 +61,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
     </xsl:if>
       
   </xsl:template>
-    <!--
-    <xsl:template match="/">
-        <xsl:apply-templates />
-    </xsl:template>
-    -->
+
+    <!-- This is the first match for this template, all things flow from here. -->
     <xsl:template match="m:mods">
         <xsl:variable name="form" select="m:physicalDescription/m:form" />
         <xsl:variable name="rform" select="m:physicalDescription/m:reformattingQuality" />
@@ -76,6 +75,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <xsl:variable name="time" select="m:subject/m:temporal" />
         <xsl:variable name="hierarchic" select="m:subject/m:hierarchicalGeographic" />
         <xsl:variable name="subname" select="m:subject/m:name" />
+        
+        
+        <xsl:apply-templates select="m:extension/m:dateCreated" mode="date_facet" />
         <!-- Commenting these out so we don't have nested add and doc tags that don't close.
         <xsl:element name="add">
             <xsl:element name="doc">
