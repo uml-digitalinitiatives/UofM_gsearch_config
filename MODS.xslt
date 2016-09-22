@@ -111,8 +111,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:apply-templates select="m:name" />
                 <!-- subject -->
                 <xsl:apply-templates select="m:subject" />
-                <!-- typeOfResource -->
-                <xsl:apply-templates select="m:typeOfResource" />
+                <!-- typeOfResource and genre as well-->
+                <xsl:apply-templates select="m:typeOfResource|m:genre" />
                 <!-- genre -->
                 <xsl:if test="m:genre">
                     <xsl:element name="field">
@@ -536,7 +536,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:element>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="m:typeOfResource">
+    <xsl:template match="m:typeOfResource|m:genre">
         <xsl:element name="field">
             <xsl:attribute name="name">type_of_resource_mt</xsl:attribute>
             <xsl:value-of select="." />
