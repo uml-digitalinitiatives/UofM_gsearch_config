@@ -27,9 +27,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:m="http://www.loc.gov/mods/v3"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
-  exclude-result-prefixes="foxml m">
+  exclude-result-prefixes="foxml m xlink xs">
   
   <xsl:include href="library/xslt-date-template.xslt"/>
+  <xsl:include href="library/mods-role-term.xslt"/>
   
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
@@ -345,10 +346,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 </xsl:otherwise>
             </xsl:choose>
             <!-- if there is text roleTerm -->
-            <xsl:for-each select="m:role/m:roleTerm[@type='text']">
-                <xsl:if test=". != ''">
+            <xsl:for-each select="m:role/m:roleTerm">
+                <xsl:if test="string-length(.) &gt; 0">
                     <xsl:text>, </xsl:text>
-                    <xsl:value-of select="." />
+                    <xsl:apply-templates select="." mode="translate" />
                 </xsl:if>
             </xsl:for-each>
         </xsl:element>
@@ -455,15 +456,31 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:element>
         </xsl:for-each>
         <!-- Jared test (2014-07-02 -->
-        <xsl:for-each select="m:hierarchicalGeographic">
-          <field name="hierarchicGeographic_facet_ms">
-            <xsl:value-of select="m:country" />
-            <xsl:if test="m:country and m:province"><xsl:text>, </xsl:text></xsl:if>
-            <xsl:value-of select="m:province"/>
-            <xsl:if test="m:country and (m:province or m:city)"><xsl:text>, </xsl:text></xsl:if>
-            <xsl:value-of select="m:city"/>
-          </field>
-        </xsl:for-each>
+        <xsl:if test="normalize-space(m:hierarchicalGeographic/text()) != ''">
+          <xsl:for-each select="m:hierarchicalGeographic">
+            <field name="hierarchicGeographic_facet_ms">
+              <xsl:value-of select="m:country" />
+              <xsl:if test="normalize-space(m:country) != '' and normalize-space(m:province) != ''"><xsl:text>, </xsl:text></xsl:if>
+              <xsl:value-of select="m:province"/>
+              <xsl:if test="normalize-space(m:country) != '' and (normalize-space(m:province) != '' or normalize-space(m:city) != '')"><xsl:text>, </xsl:text></xsl:if>
+              <xsl:value-of select="m:city"/>
+              <xsl:if test="normalize-space(m:country) != '' and (normalize-space(m:province) != '' or normalize-space(m:city) != '' or normalize-space(m:citySection) != '')"><xsl:text>, </xsl:text></xsl:if>
+              <xsl:value-of select="m:citySection"/>
+            </field>
+          </xsl:for-each>
+          <xsl:if test="m:country and normalize-space(m:country) != ''">
+            <field name="hierarchicGeographic_country_facet_ms"><xsl:value-of select="m:country"/></field>
+          </xsl:if>
+          <xsl:if test="m:province and normalize-space(m:province) != ''">
+            <field name="hierarchicGeographic_province_facet_ms"><xsl:value-of select="m:province"/></field>
+          </xsl:if>
+          <xsl:if test="m:city and normalize-space(m:city) != ''">
+            <field name="hierarchicGeographic_city_facet_ms"><xsl:value-of select="m:city"/></field>
+          </xsl:if>
+          <xsl:if test="m:citySection and normalize-space(m:citySection) != ''">
+            <field name="hierarchicGeographic_citySection_facet_ms"><xsl:value-of select="m:citySection"/></field>
+          </xsl:if>
+        </xsl:if> <!-- if hierarchicalGeographic -->
         <xsl:for-each select="$time">
             <xsl:element name="field">
                 <xsl:attribute name="name">
@@ -536,7 +553,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:element>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="m:typeOfResource|m:genre">
+    <xsl:template match="m:typeOfResource | m:genre">
         <xsl:element name="field">
             <xsl:attribute name="name">type_of_resource_mt</xsl:attribute>
             <xsl:value-of select="." />
