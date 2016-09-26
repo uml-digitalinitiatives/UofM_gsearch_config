@@ -4,6 +4,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:java="http://xml.apache.org/xalan/java"
   xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xlink">
 
   <xsl:include href="library/xslt-string-functions.xslt"/>
