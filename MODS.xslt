@@ -460,15 +460,19 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
           <xsl:for-each select="m:hierarchicalGeographic">
             <field name="hierarchicGeographic_facet_ms">
               <xsl:value-of select="m:country" />
-              <xsl:if test="normalize-space(m:country) != '' and normalize-space(m:province) != ''">
+              <xsl:if test="normalize-space(m:country) != '' and normalize-space(m:region) != ''">
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="m:region"/>
+              </xsl:if>
+              <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '') and normalize-space(m:province) != ''">
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="m:province"/>
               </xsl:if>
-              <xsl:if test="normalize-space(m:country) != '' and normalize-space(m:city) != ''">
+              <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '' or normalize-space(m:province) != '') and normalize-space(m:city) != ''">
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="m:city"/>
-              </xsl:if>
-              <xsl:if test="normalize-space(m:country) != '' and normalize-space(m:citySection) != ''">
+              </xsl:if>  
+              <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '' or normalize-space(m:province) != '' or normalize-space(m:city) != '') and normalize-space(m:citySection) != ''">
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="m:citySection"/>
               </xsl:if>
@@ -476,8 +480,14 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             <xsl:if test="m:country and normalize-space(m:country) != ''">
               <field name="hierarchicGeographic_country_facet_ms"><xsl:value-of select="m:country"/></field>
             </xsl:if>
+            <xsl:if test="m:region and normalize-space(m:region) != ''">
+              <field name="hierarchicGeographic_region_facet_ms"><xsl:value-of select="m:region"/></field>
+            </xsl:if>
             <xsl:if test="m:province and normalize-space(m:province) != ''">
               <field name="hierarchicGeographic_province_facet_ms"><xsl:value-of select="m:province"/></field>
+            </xsl:if>
+            <xsl:if test="m:state and normalize-space(m:state) != ''">
+              <field name="hierarchicGeographic_state_facet_ms"><xsl:value-of select="m:state"/></field>
             </xsl:if>
             <xsl:if test="m:city and normalize-space(m:city) != ''">
               <field name="hierarchicGeographic_city_facet_ms"><xsl:value-of select="m:city"/></field>
