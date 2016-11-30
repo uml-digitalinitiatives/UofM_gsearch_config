@@ -17,7 +17,6 @@
       PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
       PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
       SELECT ?obj ?parentTitle ?parentModel ?childModel ?childTitle
-      FROM &lt;#ri&gt;
       WHERE {
         {
           &lt;%PID_URI%&gt; fre:isMemberOfCollection ?obj .
@@ -110,7 +109,6 @@
           PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
           PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
           SELECT ?obj
-          FROM &lt;#ri&gt;
           WHERE {
             {
               ?sub fre:isMemberOfCollection ?obj
@@ -169,7 +167,6 @@
           PREFIX fre: &lt;info:fedora/fedora-system:def/relations-external#&gt;
           PREFIX fm: &lt;info:fedora/fedora-system:def/model#&gt;
           SELECT ?obj
-          FROM &lt;#ri&gt;
           WHERE {
             {
               ?obj fre:isMemberOfCollection ?sub

@@ -116,22 +116,27 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:apply-templates select="m:typeOfResource|m:genre" />
                 <!-- genre -->
                 <xsl:if test="m:genre">
+                 
                     <xsl:element name="field">
                         <xsl:attribute name="name">genre_mt</xsl:attribute>
                         <xsl:for-each select="m:genre">
+                           <xsl:if test="string-length(text()) &gt; 0">
                             <xsl:if test=". != ''">
                                 <xsl:if test="position() != 1">
                                     <xsl:text>; </xsl:text>
                                 </xsl:if>
                                 <xsl:value-of select="." />
                             </xsl:if>
+                          </xsl:if>
                         </xsl:for-each>
                     </xsl:element>
                     <xsl:for-each select="m:genre">
+                       <xsl:if test="string-length(text()) &gt; 0">
                         <xsl:element name="field">
                             <xsl:attribute name="name">genre_facet_ms</xsl:attribute>
                             <xsl:value-of select="normalize-space(.)" />
                         </xsl:element>
+                      </xsl:if>
                     </xsl:for-each>
                 </xsl:if>
                 <!-- collection -->
@@ -286,6 +291,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         </xsl:element>
     </xsl:template>
     <xsl:template match="m:name">
+       <xsl:if test="string-length(text()) &gt; 0">
         <xsl:element name="field">
             <xsl:attribute name="name">
                 <xsl:choose>
@@ -353,6 +359,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 </xsl:if>
             </xsl:for-each>
         </xsl:element>
+      </xsl:if>
 
         <xsl:variable name="nameVal">
           <xsl:choose>
@@ -397,28 +404,30 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:element name="field">
-            <xsl:attribute name="name">
-                <xsl:choose>
-                    <xsl:when test="@type='organization' or @type='corporate'">
-                        <xsl:text>name_organization_facet_ms</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="@type='conference'">
-                        <xsl:text>name_conference_facet_ms</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="@type='personal'">
-                        <xsl:text>name_personal_facet_ms</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:text>name_personal_mt</xsl:text>
-                      <xsl:message>mods:name@type check failed, using default name_personal_mt</xsl:message>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-          <xsl:value-of select="$nameVal" />
-        </xsl:element>
-        <!-- 2014-07-18 : whikloj - Also add names to the subject_name_facet -->
-        <field name="subject_name_facet_ms"><xsl:value-of select="$nameVal" /></field>
+        <xsl:if test="string-length($nameVal) &gt; 0">
+          <xsl:element name="field">
+              <xsl:attribute name="name">
+                  <xsl:choose>
+                      <xsl:when test="@type='organization' or @type='corporate'">
+                          <xsl:text>name_organization_facet_ms</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="@type='conference'">
+                          <xsl:text>name_conference_facet_ms</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="@type='personal'">
+                          <xsl:text>name_personal_facet_ms</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:text>name_personal_mt</xsl:text>
+                        <xsl:message>mods:name@type check failed, using default name_personal_mt</xsl:message>
+                      </xsl:otherwise>
+                  </xsl:choose>
+              </xsl:attribute>
+            <xsl:value-of select="$nameVal" />
+          </xsl:element>
+          <!-- 2014-07-18 : whikloj - Also add names to the subject_name_facet -->
+          <field name="subject_name_facet_ms"><xsl:value-of select="$nameVal" /></field>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="m:subject">
         <xsl:variable name="topic" select="m:topic|m:occupation|m:titleInfo" />
@@ -427,7 +436,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <xsl:variable name="cart" select="m:cartographics" />
         <xsl:variable name="genre" select="m:genre" />
         <xsl:variable name="subname" select="m:name" />
-        <xsl:for-each select="$topic">
+        <xsl:for-each select="$topic[string-length(text()) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_topic_mt</xsl:text>
@@ -441,7 +450,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:element>
         </xsl:for-each>
-        <xsl:for-each select="$geo">
+        <xsl:for-each select="$geo[string-length(text()) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_geographic_mt</xsl:text>
@@ -484,10 +493,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               <field name="hierarchicGeographic_region_facet_ms"><xsl:value-of select="m:region"/></field>
             </xsl:if>
             <xsl:if test="m:province and normalize-space(m:province) != ''">
-              <field name="hierarchicGeographic_province_facet_ms"><xsl:value-of select="m:province"/></field>
+              <field name="hierarchicGeographic_province_state_facet_ms"><xsl:value-of select="m:province"/></field>
             </xsl:if>
             <xsl:if test="m:state and normalize-space(m:state) != ''">
-              <field name="hierarchicGeographic_state_facet_ms"><xsl:value-of select="m:state"/></field>
+              <field name="hierarchicGeographic_province_state_facet_ms"><xsl:value-of select="m:state"/></field>
             </xsl:if>
             <xsl:if test="m:city and normalize-space(m:city) != ''">
               <field name="hierarchicGeographic_city_facet_ms"><xsl:value-of select="m:city"/></field>
@@ -497,7 +506,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:if>
           </xsl:for-each>
         </xsl:if> <!-- if hierarchicalGeographic -->
-        <xsl:for-each select="$time">
+        <xsl:for-each select="$time[string-length(text()) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_temporal_mt</xsl:text>
@@ -511,7 +520,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:element>
         </xsl:for-each>
-        <xsl:for-each select="$subname">
+        <xsl:for-each select="$subname[string-length(text()) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_name_mt</xsl:text>
@@ -525,7 +534,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:element>
         </xsl:for-each>
-        <xsl:for-each select="$genre">
+        <xsl:for-each select="$genre[string-length(text()) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>genre_mt</xsl:text>
@@ -700,20 +709,20 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <xsl:variable name="date_valid" select="m:dateValid[not(@keyDate)]" />
         <xsl:variable name="date_modified" select="m:dateModified[not(@keyDate)]" />
         <xsl:choose>
-            <xsl:when test="$date_splat_w3c_key_date">
+            <xsl:when test="$date_splat_w3c_key_date[string-length(text()) &gt; 0]">
                 <xsl:element name="field">
                     <xsl:attribute name="name">raw_date</xsl:attribute>
                     <xsl:value-of select="$date_splat_w3c_key_date" />
                 </xsl:element>
             </xsl:when>
-            <xsl:when test="$date_splat_key_date">
+            <xsl:when test="$date_splat_key_date[string-length(text()) &gt; 0]">
                 <xsl:element name="field">
                     <xsl:attribute name="name">raw_date</xsl:attribute>
                     <xsl:value-of select="$date_splat_key_date" />
                 </xsl:element>
             </xsl:when>
-            <xsl:when test="$date_created">
-                <xsl:for-each select="$date_created">
+            <xsl:when test="$date_created[string-length(text()) &gt; 0]">
+                <xsl:for-each select="$date_created[string-length(text()) &gt; 0]">
                     <xsl:element name="field">
                         <xsl:attribute name="name">raw_date</xsl:attribute>
                         <xsl:choose>
@@ -729,8 +738,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     </xsl:element>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$date_issued">
-                <xsl:for-each select="$date_issued">
+            <xsl:when test="$date_issued[string-length(text()) &gt; 0]">
+                <xsl:for-each select="$date_issued[string-length(text()) &gt; 0]">
                     <!-- also make a mods_custom_date_facet -->
                     <xsl:apply-templates select="$date_issued" mode="date_facet"/>
                     <xsl:element name="field">
@@ -751,8 +760,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     </xsl:element>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$date_copyrighted">
-                <xsl:for-each select="$date_copyrighted">
+            <xsl:when test="$date_copyrighted[string-length(text()) &gt; 0]">
+                <xsl:for-each select="$date_copyrighted[string-length(text()) &gt; 0]">
                     <xsl:element name="field">
                         <xsl:attribute name="name">raw_date</xsl:attribute>
                         <xsl:choose>
@@ -771,8 +780,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     </xsl:element>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="$date_other">
-                <xsl:for-each select="$date_other">
+            <xsl:when test="$date_other[string-length(text()) &gt; 0]">
+                <xsl:for-each select="$date_other[string-length(text()) &gt; 0]">
                     <xsl:element name="field">
                         <xsl:attribute name="name">raw_date</xsl:attribute>
                         <xsl:choose>
