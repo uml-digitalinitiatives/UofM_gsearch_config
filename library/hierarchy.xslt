@@ -3,7 +3,7 @@
   xmlns:sparql="http://www.w3.org/2005/sparql-results#"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:include href="library/traverse-graph.xslt"/>
+  <xsl:include href="traverse-graph.xslt"/>
 
   <!-- Pull both ancestors and Parent Collections -->
   <xsl:template name="get-ancestors-and-collections">
@@ -46,9 +46,9 @@
         <!--Provide the pid as a starting point, wrapped as a sparql result.-->
         <xsl:with-param name="to_traverse_in">
           <sparql:result>
-            <sparql:obj>
-              <xsl:attribute name="uri"><xsl:value-of select="$FULL_PID"/></xsl:attribute>
-            </sparql:obj>
+            <sparql:binding name="obj">
+              <sparql:uri><xsl:value-of select="$FULL_PID"/></sparql:uri>
+            </sparql:binding>
           </sparql:result>
         </xsl:with-param>
         <xsl:with-param name="lang">sparql</xsl:with-param>
@@ -59,20 +59,20 @@
     </xsl:variable>
     
     <xsl:for-each select="xalan:nodeset($query_results)//sparql:result">
-      <xsl:if test="not(sparql:binding['name' = 'obj']/sparql:uri = $FULL_PID)">
-        <xsl:if test="not(preceding-sibling::node()/sparql:binding['name' = 'obj']/sparql:uri = sparql:binding['name' = 'obj']/sparql:uri) and string-length(sparql:binding['name' = 'obj']/sparql:uri) &gt; 0">
-          <field name="ancestors_ms"><xsl:value-of select="substring-after(sparql:binding['name' = 'obj']/sparql:uri, '/')"/></field>
+      <xsl:if test="not(sparql:binding[@name = 'obj']/sparql:uri = $FULL_PID)">
+        <xsl:if test="not(preceding-sibling::node()/sparql:binding[@name = 'obj']/sparql:uri = sparql:binding[@name = 'obj']/sparql:uri) and string-length(sparql:binding[@name = 'obj']/sparql:uri) &gt; 0">
+          <field name="ancestors_ms"><xsl:value-of select="substring-after(sparql:binding[@name = 'obj']/sparql:uri, '/')"/></field>
         </xsl:if>
         <!-- if the parent has a title AND the child is not a newspaper or a collection AND the parent is a collection or a newspaper, get the title-->
-        <xsl:if test="string-length(sparql:binding['name' = 'parentTitle']/sparql:literal) &gt; 0 and not(substring-after(sparql:binding['name' = 'childModel']/sparql:uri, '/') = 'islandora:newspaperCModel') and not(substring-after(sparql:binding['name' = 'childModel']/sparql:uri, '/') = 'islandora:collectionCModel') and (substring-after(sparql:binding['name' = 'parentModel']/sparql:uri, '/') = 'islandora:collectionCModel' or substring-after(sparql:binding['name' = 'parentModel']/sparql:uri, '/') = 'islandora:newspaperCModel')">
-          <field name="collection_title_ms"><xsl:value-of select="sparql:binding['name' = 'parentTitle']/sparql:literal"/></field>
+        <xsl:if test="string-length(sparql:binding[@name = 'parentTitle']/sparql:literal) &gt; 0 and not(substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:newspaperCModel') and not(substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:collectionCModel') and (substring-after(sparql:binding[@name = 'parentModel']/sparql:uri, '/') = 'islandora:collectionCModel' or substring-after(sparql:binding[@name = 'parentModel']/sparql:uri, '/') = 'islandora:newspaperCModel')">
+          <field name="collection_title_ms"><xsl:value-of select="sparql:binding[@name = 'parentTitle']/sparql:literal"/></field>
         </xsl:if>
         <xsl:choose>
-          <xsl:when test="string-length(sparql:binding['name' = 'parentTitle']/sparql:literal) &gt; 0 and (substring-after(sparql:binding['name' = 'childModel']/sparql:uri, '/') = 'islandora:newspaperPageCModel' or substring-after(sparql:binding['name' = 'childModel']/sparql:uri, '/') = 'islandora:pageCModel')">
-            <field name="facet_group_title_ms"><xsl:value-of select="sparql:binding['name' = 'parentTitle']/sparql:literal"/></field>
+          <xsl:when test="string-length(sparql:binding[@name = 'parentTitle']/sparql:literal) &gt; 0 and (substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:newspaperPageCModel' or substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:pageCModel')">
+            <field name="facet_group_title_ms"><xsl:value-of select="sparql:binding[@name = 'parentTitle']/sparql:literal"/></field>
           </xsl:when>
           <xsl:when test="position() = 2">
-            <field name="facet_group_title_ms"><xsl:value-of select="sparql:binding['name' = 'childTitle']/sparql:literal"/></field>
+            <field name="facet_group_title_ms"><xsl:value-of select="sparql:binding[@name = 'childTitle']/sparql:literal"/></field>
           </xsl:when>
         </xsl:choose>
       </xsl:if>

@@ -60,8 +60,8 @@
             <xsl:if test="$debug">
               <xsl:message>diff: <xsl:value-of select="res:obj/@uri"/></xsl:message>
             </xsl:if>
-            <xsl:if test="string-length(res:binding['name' = 'obj']/uri) &gt; 0">
-              <xsl:variable name="new_query" select="string:replaceAll($query, '%PID_URI%', res:binding['name' = 'obj']/uri)"/>
+            <xsl:if test="string-length(res:binding[@name = 'obj']/res:uri) &gt; 0">
+              <xsl:variable name="new_query" select="string:replaceAll($query, '%PID_URI%', res:binding[@name = 'obj']/res:uri)"/>
               <xsl:variable name="query_results">
                 <xsl:call-template name="perform_traversal_query">
                   <xsl:with-param name="risearch" select="$risearch"/>
