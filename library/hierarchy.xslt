@@ -3,7 +3,7 @@
   xmlns:sparql="http://www.w3.org/2005/sparql-results#"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:include href="traverse-graph.xslt"/>
+  <xsl:include href="library/traverse-graph.xslt"/>
 
   <!-- Pull both ancestors and Parent Collections -->
   <xsl:template name="get-ancestors-and-collections">
