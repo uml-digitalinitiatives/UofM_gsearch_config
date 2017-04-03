@@ -28,10 +28,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   xmlns:m="http://www.loc.gov/mods/v3"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   exclude-result-prefixes="foxml m xlink xs">
-  
+
   <xsl:include href="library/xslt-date-template.xslt"/>
   <xsl:include href="library/mods-role-term.xslt"/>
-  
+
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
 <!-- This is left over from the one stylesheet to rule them all format
@@ -53,14 +53,14 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
     This is to provide context to the Solr field.-->
   <xsl:template name="get_all_parents">
     <xsl:param name="node"/>
-    
+
     <xsl:if test="not(local-name($node)='mods')">
       <xsl:call-template name="get_all_parents">
         <xsl:with-param name="node" select="$node/.."/>
       </xsl:call-template>
       <xsl:value-of select="concat('_', local-name($node))"/>
     </xsl:if>
-      
+
   </xsl:template>
 
     <!-- This is the first match for this template, all things flow from here. -->
@@ -76,8 +76,8 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <xsl:variable name="time" select="m:subject/m:temporal" />
         <xsl:variable name="hierarchic" select="m:subject/m:hierarchicalGeographic" />
         <xsl:variable name="subname" select="m:subject/m:name" />
-        
-        
+
+
         <xsl:apply-templates select="m:extension/m:dateCreated" mode="date_facet" />
         <!-- Commenting these out so we don't have nested add and doc tags that don't close.
         <xsl:element name="add">
@@ -116,7 +116,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:apply-templates select="m:typeOfResource|m:genre" />
                 <!-- genre -->
                 <xsl:if test="m:genre">
-                 
+
                     <xsl:element name="field">
                         <xsl:attribute name="name">genre_mt</xsl:attribute>
                         <xsl:for-each select="m:genre">
@@ -246,6 +246,17 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                     <xsl:value-of select="$nsort" />
                     <xsl:value-of select="$titl" />
                     <xsl:for-each select="m:subTitle">
+                        <xsl:if test=". != ''">
+                            <xsl:if test="position()=1 and $titl">
+                                <xsl:text>; </xsl:text>
+                            </xsl:if>
+                            <xsl:value-of select="." />
+                            <xsl:if test="position() != last()">
+                                <xsl:text>; </xsl:text>
+                            </xsl:if>
+                        </xsl:if>
+                    </xsl:for-each>
+                    <xsl:for-each select="m:subtitle">
                         <xsl:if test=". != ''">
                             <xsl:if test="position()=1 and $titl">
                                 <xsl:text>; </xsl:text>
@@ -480,7 +491,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '' or normalize-space(m:province) != '') and normalize-space(m:city) != ''">
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="m:city"/>
-              </xsl:if>  
+              </xsl:if>
               <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '' or normalize-space(m:province) != '' or normalize-space(m:city) != '') and normalize-space(m:citySection) != ''">
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="m:citySection"/>
@@ -689,7 +700,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         </xsl:element>
     </xsl:template>
     <xsl:template match="m:originInfo">
-        <!--+ 
+        <!--+
      + first look for any date with a keyDate and any attribute with the value w3cdtf
      + then for any date with a keyDate
      + then for the first dateIssued
@@ -829,7 +840,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         </xsl:if>
         <xsl:variable name="pl" select="m:place" />
         <xsl:variable name="pub" select="m:publisher" />
-        <xsl:variable name="datei" select="m:dateIssued" />  <!--separator="== "--> 
+        <xsl:variable name="datei" select="m:dateIssued" />  <!--separator="== "-->
         <xsl:variable name="datec" select="m:dateCreated" />
         <xsl:variable name="datecr" select="m:copyrightDate" />
         <xsl:variable name="edit" select="m:edition" />
@@ -913,22 +924,22 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 </xsl:if>
             </xsl:element>
         </xsl:if>
-        
+
         <!-- Handle dates. -->
         <xsl:for-each select=".//m:*[(@type='date') or (contains(translate(local-name(), 'D', 'd'), 'date'))][normalize-space(text())]">
-          
+
           <xsl:variable name="textValue">
             <xsl:call-template name="get_ISO8601_date">
               <xsl:with-param name="date" select="normalize-space(text())"/>
             </xsl:call-template>
           </xsl:variable>
-          
+
           <xsl:variable name="fieldName">
             <xsl:call-template name="get_all_parents">
               <xsl:with-param name="node" select="."/>
             </xsl:call-template>
           </xsl:variable>
-          
+
           <xsl:if test="normalize-space($textValue)">
             <field>
               <xsl:attribute name="name">
@@ -966,5 +977,5 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
 
 
     <xsl:template match="text()"/>
-    
+
 </xsl:stylesheet>
