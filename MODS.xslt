@@ -478,25 +478,16 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <!-- Jared test (2014-07-02 -->
         <xsl:if test="normalize-space(m:hierarchicalGeographic) != ''">
           <xsl:for-each select="m:hierarchicalGeographic">
-            <field name="hierarchicGeographic_facet_ms">
-              <xsl:value-of select="m:country" />
-              <xsl:if test="normalize-space(m:country) != '' and normalize-space(m:region) != ''">
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="m:region"/>
-              </xsl:if>
-              <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '') and normalize-space(m:province) != ''">
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="m:province"/>
-              </xsl:if>
-              <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '' or normalize-space(m:province) != '') and normalize-space(m:city) != ''">
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="m:city"/>
-              </xsl:if>
-              <xsl:if test="(normalize-space(m:country) != '' or normalize-space(m:region) != '' or normalize-space(m:province) != '' or normalize-space(m:city) != '') and normalize-space(m:citySection) != ''">
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="m:citySection"/>
-              </xsl:if>
-            </field>
+            <xsl:variable name="place_string">
+              <xsl:call-template name="list_with_commas">
+                <xsl:with-param name="list" select="*"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="string-length($place_string) &gt; 0">
+              <field name="hierarchicGeographic_facet_ms">
+                <xsl:value-of select="$place_string"/>
+              </field>
+            </xsl:if>
             <xsl:if test="m:country and normalize-space(m:country) != ''">
               <field name="hierarchicGeographic_country_facet_ms"><xsl:value-of select="m:country"/></field>
             </xsl:if>
@@ -505,6 +496,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:if>
             <xsl:if test="m:province and normalize-space(m:province) != ''">
               <field name="hierarchicGeographic_province_state_facet_ms"><xsl:value-of select="m:province"/></field>
+            </xsl:if>
+            <xsl:if test="m:county and normalize-space(m:county) != ''">
+              <field name="hierarchicGeographic_county_facet_ms"><xsl:value-of select="m:county"/></field>
             </xsl:if>
             <xsl:if test="m:state and normalize-space(m:state) != ''">
               <field name="hierarchicGeographic_province_state_facet_ms"><xsl:value-of select="m:state"/></field>
@@ -975,6 +969,18 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
      </xsl:if>
     </xsl:template>
 
+   <!-- This loops through the nodes and prints the values with a comma in front except the first.-->
+   <xsl:template name="list_with_commas">
+     <xsl:param name="list"/>
+     <xsl:for-each select="$list">
+        <xsl:if test="string-length(text()|*) &gt; 0">
+          <xsl:if test="position() &gt; 1">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
+          <xsl:value-of select="."/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:template>
 
     <xsl:template match="text()"/>
 
