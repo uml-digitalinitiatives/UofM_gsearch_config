@@ -27,7 +27,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:m="http://www.loc.gov/mods/v3"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
-  exclude-result-prefixes="foxml m xlink xs">
+  xmlns:exsl="http://exslt.org/common"
+  extension-element-prefixes="exsl"
+  exclude-result-prefixes="foxml m xlink xs exsl">
 
   <xsl:include href="library/xslt-date-template.xslt"/>
   <xsl:include href="library/mods-role-term.xslt"/>
@@ -480,7 +482,15 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
           <xsl:for-each select="m:hierarchicalGeographic">
             <xsl:variable name="place_string">
               <xsl:call-template name="list_with_commas">
-                <xsl:with-param name="list" select="*"/>
+                <xsl:with-param name="list">
+                  <xsl:copy-of select="m:country"/>
+                  <xsl:copy-of select="m:province"/>
+                  <xsl:copy-of select="m:state"/>
+                  <xsl:copy-of select="m:region"/>
+                  <xsl:copy-of select="m:county"/>
+                  <xsl:copy-of select="m:city"/>
+                  <xsl:copy-of select="m:citySection"/>
+                </xsl:with-param>
               </xsl:call-template>
             </xsl:variable>
             <xsl:if test="string-length($place_string) &gt; 0">
@@ -972,12 +982,12 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
    <!-- This loops through the nodes and prints the values with a comma in front except the first.-->
    <xsl:template name="list_with_commas">
      <xsl:param name="list"/>
-     <xsl:for-each select="$list">
+     <xsl:for-each select="exsl:node-set($list)/node()">
         <xsl:if test="string-length(text()|*) &gt; 0">
           <xsl:if test="position() &gt; 1">
             <xsl:text>, </xsl:text>
           </xsl:if>
-          <xsl:value-of select="."/>
+          <xsl:value-of select="text()"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:template>
