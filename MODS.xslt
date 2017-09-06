@@ -372,6 +372,14 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 </xsl:if>
             </xsl:for-each>
         </xsl:element>
+        <xsl:for-each select="m:role/m:roleTerm">
+            <xsl:if test="string-length(.) &gt; 0">
+                <xsl:element name="field">
+                    <xsl:attribute name="name">mods_roleterm_ms</xsl:attribute>
+                    <xsl:apply-templates select="." mode="translate" />
+                </xsl:element>
+            </xsl:if>
+        </xsl:for-each>
       </xsl:if>
 
         <xsl:variable name="nameVal">
