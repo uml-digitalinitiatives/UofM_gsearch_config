@@ -447,7 +447,19 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             <xsl:value-of select="$nameVal" />
           </xsl:element>
           <!-- 2014-07-18 : whikloj - Also add names to the subject_name_facet -->
-          <field name="subject_name_facet_ms"><xsl:value-of select="$nameVal" /></field>
+          <!-- 2017-09-19 : whikloj - Add roleTerm to display with name in facet -->
+          <xsl:choose>
+            <xsl:when test="string-length(m:role/m:roleTerm) &gt; 0">
+              <xsl:for-each select="m:role/m:roleTerm">
+                <field name="subject_name_facet_ms"><xsl:value-of select="concat($nameVal, ' - ')" />
+                    <xsl:apply-templates select="." mode="translate" />
+                </field>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <field name="subject_name_facet_ms"><xsl:value-of select="$nameVal"/></field>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
     </xsl:template>
     <xsl:template match="m:subject">
