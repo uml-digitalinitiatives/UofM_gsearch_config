@@ -8,17 +8,17 @@
   <!-- have the template match whatever datastream needs this type of processing -->
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
-  
+
   <xsl:template match="xhtml:html/xhtml:body">
     <xsl:param name="prefix">text_nodes_</xsl:param>
     <xsl:param name="suffix">_hlt</xsl:param>
 
-    <field>
+    <xsl:element name="field">
       <xsl:attribute name="name">
         <xsl:value-of select="concat($prefix, 'HOCR' , $suffix)"/>
       </xsl:attribute>
       <xsl:apply-templates mode="index_text_nodes_as_a_text_field"/>
-    </field>
+    </xsl:element>
   </xsl:template>
 
   <!-- Only output non-empty text nodes (followed by a single space) -->

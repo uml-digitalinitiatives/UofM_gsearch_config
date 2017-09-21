@@ -514,33 +514,34 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               </xsl:call-template>
             </xsl:variable>
             <xsl:if test="string-length($place_string) &gt; 0">
-              <field name="hierarchicGeographic_facet_ms">
+              <xsl:element name="field">
+                <xsl:attribute name="name">hierarchicGeographic_facet_ms</xsl:attribute>
                 <xsl:value-of select="$place_string"/>
-              </field>
+              </xsl:element>
             </xsl:if>
             <xsl:if test="m:country and normalize-space(m:country) != ''">
-              <field name="hierarchicGeographic_country_facet_ms"><xsl:value-of select="m:country"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_country_facet_ms</xsl:attribute><xsl:value-of select="m:country"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:region and normalize-space(m:region) != ''">
-              <field name="hierarchicGeographic_region_facet_ms"><xsl:value-of select="m:region"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_region_facet_ms</xsl:attribute><xsl:value-of select="m:region"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:province and normalize-space(m:province) != ''">
-              <field name="hierarchicGeographic_province_state_facet_ms"><xsl:value-of select="m:province"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_province_state_facet_ms</xsl:attribute><xsl:value-of select="m:province"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:county and normalize-space(m:county) != ''">
-              <field name="hierarchicGeographic_county_facet_ms"><xsl:value-of select="m:county"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_county_facet_ms</xsl:attribute><xsl:value-of select="m:county"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:state and normalize-space(m:state) != ''">
-              <field name="hierarchicGeographic_province_state_facet_ms"><xsl:value-of select="m:state"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_province_state_facet_ms</xsl:attribute><xsl:value-of select="m:state"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:city and normalize-space(m:city) != ''">
-              <field name="hierarchicGeographic_city_facet_ms"><xsl:value-of select="m:city"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_city_facet_ms</xsl:attribute><xsl:value-of select="m:city"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:citySection and normalize-space(m:citySection) != ''">
-              <field name="hierarchicGeographic_citySection_facet_ms"><xsl:value-of select="m:citySection"/></field>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_citySection_facet_ms</xsl:attribute><xsl:value-of select="m:citySection"/></xsl:element>
             </xsl:if>
           </xsl:for-each>
-        </xsl:if> <!-- if hierarchicalGeographic -->
+        </xsl:if>
         <xsl:for-each select="$time[string-length(text()) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
@@ -965,7 +966,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
           </xsl:variable>
 
           <xsl:if test="normalize-space($textValue)">
-            <field>
+            <xsl:element name="field">
               <xsl:attribute name="name">
 	        <xsl:choose>
                   <xsl:when test="@point = 'start'">
@@ -982,7 +983,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               <!--  <xsl:value-of select="concat($prefix, $fieldName, '_dt')"/> -->
               </xsl:attribute>
               <xsl:value-of select="$textValue"/>
-            </field>
+            </xsl:element>
           </xsl:if>
         </xsl:for-each>
 

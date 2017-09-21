@@ -20,12 +20,12 @@
     </xsl:apply-templates>
 
   </xsl:template>
-  
+
   <xsl:template match="*[@rdf:resource]" mode="RELS-EXT-INT">
     <xsl:param name="prefix"/>
     <xsl:param name="suffix">_ms</xsl:param>
-    
-    <field>
+
+    <xsl:element name="field">
       <xsl:attribute name="name">
         <xsl:value-of select="concat($prefix, local-name(), '_uri', $suffix)"/>
       </xsl:attribute>
@@ -39,21 +39,21 @@
         </xsl:otherwise>
       </xsl:choose>
       <!-- END OF HACK -->
-    </field>
+    </xsl:element>
   </xsl:template>
-  
+
   <xsl:template match="*[not(@rdf:resource)][normalize-space(text())]" mode="RELS-EXT-INT">
     <xsl:param name="prefix"/>
     <xsl:param name="suffix">_ms</xsl:param>
 
-    <field>
+    <xsl:element name="field">
       <xsl:attribute name="name">
         <xsl:value-of select="concat($prefix, local-name(), '_literal', $suffix)"/>
       </xsl:attribute>
       <xsl:value-of select="text()"/>
-    </field>
+    </xsl:element>
   </xsl:template>
-  
+
   <xsl:template match="text()"/>
-  
+
 </xsl:stylesheet>

@@ -57,22 +57,34 @@
         <xsl:with-param name="query" select="$query"/>
       </xsl:call-template>
     </xsl:variable>
-    
+
     <xsl:for-each select="xalan:nodeset($query_results)//sparql:result">
       <xsl:if test="not(sparql:binding[@name = 'obj']/sparql:uri = $FULL_PID)">
         <xsl:if test="not(preceding-sibling::node()/sparql:binding[@name = 'obj']/sparql:uri = sparql:binding[@name = 'obj']/sparql:uri) and string-length(sparql:binding[@name = 'obj']/sparql:uri) &gt; 0">
-          <field name="ancestors_ms"><xsl:value-of select="substring-after(sparql:binding[@name = 'obj']/sparql:uri, '/')"/></field>
+          <xsl:element name="field">
+            <xsl:attribute name="name">ancestors_ms</xsl:attribute>
+            <xsl:value-of select="substring-after(sparql:binding[@name = 'obj']/sparql:uri, '/')"/>
+          </xsl:element>
         </xsl:if>
         <!-- if the parent has a title AND the child is not a newspaper or a collection AND the parent is a collection or a newspaper, get the title-->
         <xsl:if test="string-length(sparql:binding[@name = 'parentTitle']/sparql:literal) &gt; 0 and not(substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:newspaperCModel') and not(substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:collectionCModel') and (substring-after(sparql:binding[@name = 'parentModel']/sparql:uri, '/') = 'islandora:collectionCModel' or substring-after(sparql:binding[@name = 'parentModel']/sparql:uri, '/') = 'islandora:newspaperCModel')">
-          <field name="collection_title_ms"><xsl:value-of select="sparql:binding[@name = 'parentTitle']/sparql:literal"/></field>
+          <xsl:element name="field">
+            <xsl:attribute name="name">collection_title_ms</xsl:attribute>
+            <xsl:value-of select="sparql:binding[@name = 'parentTitle']/sparql:literal"/>
+          </xsl:element>
         </xsl:if>
         <xsl:choose>
           <xsl:when test="string-length(sparql:binding[@name = 'parentTitle']/sparql:literal) &gt; 0 and (substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:newspaperPageCModel' or substring-after(sparql:binding[@name = 'childModel']/sparql:uri, '/') = 'islandora:pageCModel')">
-            <field name="facet_group_title_ms"><xsl:value-of select="sparql:binding[@name = 'parentTitle']/sparql:literal"/></field>
+            <xsl:element name="field">
+              <xsl:attribute name="name">facet_group_title_ms</xsl:attribute>
+              <xsl:value-of select="sparql:binding[@name = 'parentTitle']/sparql:literal"/>
+            </xsl:element>
           </xsl:when>
           <xsl:when test="position() = 2">
-            <field name="facet_group_title_ms"><xsl:value-of select="sparql:binding[@name = 'childTitle']/sparql:literal"/></field>
+            <xsl:element name="field">
+              <xsl:attribute name="name">facet_group_title_ms</xsl:attribute>
+              <xsl:value-of select="sparql:binding[@name = 'childTitle']/sparql:literal"/>
+            </xsl:element>
           </xsl:when>
         </xsl:choose>
       </xsl:if>
@@ -132,7 +144,10 @@
     <!--Iterate over the results of the traversal and construct the field tags for the solr update doc-->
     <xsl:for-each select="xalan:nodeset($graph)//sparql:obj">
       <xsl:if test="@uri != $FULL_PID">
-        <field name="ancestors_ms"><xsl:value-of select="substring-after(@uri, '/')"/></field>
+        <xsl:element name="field">
+          <xsl:attribute name="name">ancestors_ms</xsl:attribute>
+          <xsl:value-of select="substring-after(@uri, '/')"/>
+        </xsl:element>
       </xsl:if>
     </xsl:for-each>
 
@@ -190,7 +205,10 @@
     <!--Iterate over the results of the traversal and construct the field tags for the solr update doc-->
     <xsl:for-each select="xalan:nodeset($graph)//sparql:obj">
       <xsl:if test="@uri != $FULL_PID">
-        <field name="descendants_ms"><xsl:value-of select="substring-after(@uri, '/')"/></field>
+        <xsl:element name="field">
+          <xsl:attribute name="name">descendants_ms</xsl:attribute>
+          <xsl:value-of select="substring-after(@uri, '/')"/>
+        </xsl:element>
       </xsl:if>
     </xsl:for-each>
 

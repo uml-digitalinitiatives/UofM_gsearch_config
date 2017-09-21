@@ -16,12 +16,12 @@
     <!-- Create fields for the set of selected elements, named according to the 'local-name' and containing the 'text' -->
     <xsl:for-each select="./*">
 
-      <field>
+      <xsl:element name="field">
         <xsl:attribute name="name">
           <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
         </xsl:attribute>
         <xsl:value-of select="text()"/>
-      </field>
+      </xsl:element>
     </xsl:for-each>
 
   </xsl:template>

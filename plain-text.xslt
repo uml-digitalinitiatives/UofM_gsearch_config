@@ -10,13 +10,13 @@
       this file would then be re-named match all text datastreams
   -->
   <xsl:param name="DSID"/>
-  
+
   <xsl:template match="OCR|TEXT|FULL_TEXT" name="plain-text">
-    <field>
+    <xsl:element name="field">
       <xsl:attribute name="name">
         <xsl:value-of select="concat($DSID, '_t')"/>
       </xsl:attribute>
       <xsl:value-of select="text()"/>
-    </field>
+    </xsl:element>
   </xsl:template>
 </xsl:stylesheet>

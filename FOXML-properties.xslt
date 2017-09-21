@@ -10,31 +10,34 @@
   <xsl:param name="pid"/>
 
   <xsl:template match="foxml:objectProperties">
-    <field name="PID"><xsl:value-of select="$pid"/></field>
+    <xsl:element name="field">
+      <xsl:attribute name="name">PID</xsl:attribute>
+      <xsl:value-of select="$pid"/>
+    </xsl:element>
     <xsl:apply-templates select="child::*" mode="FOXML-properties"/>
   </xsl:template>
 
   <xsl:template match="foxml:property[substring-after(@NAME, '#')='createdDate' or substring-after(@NAME, '#')='lastModifiedDate']" mode="FOXML-properties">
     <xsl:param name="prefix">fgs_</xsl:param>
     <xsl:param name="suffix">_dt</xsl:param>
-    <field>
+    <xsl:element name="field">
       <xsl:attribute name="name">
         <xsl:value-of select="concat($prefix, substring-after(@NAME,'#'), $suffix)"/>
       </xsl:attribute>
       <xsl:value-of select="@VALUE"/>
-    </field>
+    </xsl:element>
   </xsl:template>
 
 <!-- Index the fedora properties -->
   <xsl:template match="foxml:property" mode="FOXML-properties">
     <xsl:param name="prefix">fgs_</xsl:param>
     <xsl:param name="suffix">_s</xsl:param>
-    <field>
+    <xsl:element name="field">
       <xsl:attribute name="name">
         <xsl:value-of select="concat($prefix, substring-after(@NAME,'#'), $suffix)"/>
       </xsl:attribute>
       <xsl:value-of select="@VALUE"/>
-    </field>
+    </xsl:element>
   </xsl:template>
 
 </xsl:stylesheet>
