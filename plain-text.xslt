@@ -14,7 +14,9 @@
   <xsl:template match="OCR|TEXT|FULL_TEXT" name="plain-text">
     <xsl:element name="field">
       <xsl:attribute name="name">
-        <xsl:value-of select="concat($DSID, '_t')"/>
+        <!--<xsl:value-of select="concat($DSID, '_t')"/>-->
+        <!-- Index all of these datastreams as OCR_t -->
+        <xsl:text>OCR_t</xsl:text>
       </xsl:attribute>
       <xsl:value-of select="text()"/>
     </xsl:element>
