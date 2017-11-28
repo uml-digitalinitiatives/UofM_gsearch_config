@@ -25,33 +25,37 @@
     <xsl:param name="prefix"/>
     <xsl:param name="suffix">_ms</xsl:param>
 
-    <xsl:element name="field">
-      <xsl:attribute name="name">
-        <xsl:value-of select="concat($prefix, local-name(), '_uri', $suffix)"/>
-      </xsl:attribute>
-      <!-- Hack the isMemberOfCollection value apart to not mess with Danny Joris's solr views -->
-      <xsl:choose>
-        <xsl:when test="local-name()='isMemberOfCollection'">
-          <xsl:value-of select="substring-after(@rdf:resource, '/')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@rdf:resource"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <!-- END OF HACK -->
-    </xsl:element>
+    <xsl:if test="(local-name()='isMemberOfCollection' and string-length(substring-after(@resource, '/')) &gt; 0) or string-length(@resource) &gt; 0">
+      <xsl:element name="field">
+        <xsl:attribute name="name">
+          <xsl:value-of select="concat($prefix, local-name(), '_uri', $suffix)"/>
+        </xsl:attribute>
+        <!-- Hack the isMemberOfCollection value apart to not mess with Danny Joris's solr views -->
+        <xsl:choose>
+          <xsl:when test="local-name()='isMemberOfCollection'">
+            <xsl:value-of select="substring-after(@rdf:resource, '/')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@rdf:resource"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <!-- END OF HACK -->
+      </xsl:element>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*[not(@rdf:resource)][normalize-space(text())]" mode="RELS-EXT-INT">
+  <xsl:template match="*[not(@rdf:resource)]" mode="RELS-EXT-INT">
     <xsl:param name="prefix"/>
     <xsl:param name="suffix">_ms</xsl:param>
 
-    <xsl:element name="field">
-      <xsl:attribute name="name">
-        <xsl:value-of select="concat($prefix, local-name(), '_literal', $suffix)"/>
-      </xsl:attribute>
-      <xsl:value-of select="text()"/>
-    </xsl:element>
+    <xsl:if test="string-length(text()) &gt; 0">
+      <xsl:element name="field">
+        <xsl:attribute name="name">
+          <xsl:value-of select="concat($prefix, local-name(), '_literal', $suffix)"/>
+        </xsl:attribute>
+        <xsl:value-of select="text()"/>
+      </xsl:element>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="text()"/>

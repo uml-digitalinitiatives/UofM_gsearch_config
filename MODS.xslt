@@ -469,7 +469,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         <xsl:variable name="cart" select="m:cartographics" />
         <xsl:variable name="genre" select="m:genre" />
         <xsl:variable name="subname" select="m:name" />
-        <xsl:for-each select="$topic[string-length(text()) &gt; 0]">
+        <xsl:for-each select="$topic[string-length(normalize-space(.)) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_topic_mt</xsl:text>
@@ -483,7 +483,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:element>
         </xsl:for-each>
-        <xsl:for-each select="$geo[string-length(text()) &gt; 0]">
+        <xsl:for-each select="$geo[string-length(.) &gt; 0]">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_geographic_mt</xsl:text>
@@ -586,35 +586,35 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         </xsl:for-each>
         <!-- slurp up all sub elements of subject into one field, not sure if we need this -->
         <xsl:if test="*">
+          <xsl:variable name="subject_text">
+            <xsl:for-each select="*">
+              <xsl:if test="string-length(normalize-space(.)) &gt; 0">
+                <xsl:value-of select="normalize-space(.)" />
+                  <xsl:if test="position()!=last()">
+                    <xsl:text> -- </xsl:text>
+                  </xsl:if>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:variable>
+          <xsl:if test="string-length($subject_text) &gt; 0">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_mt</xsl:text>
                 </xsl:attribute>
-                <xsl:for-each select="*">
-                    <xsl:if test=". != ''">
-                        <xsl:value-of select="." />
-                        <xsl:if test="position()!=last()">
-                            <xsl:text> --</xsl:text>
-                        </xsl:if>
-                    </xsl:if>
-                </xsl:for-each>
+                <xsl:value-of select="$subject_text"/>
             </xsl:element>
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:text>subject_facet_ms</xsl:text>
                 </xsl:attribute>
-                <xsl:for-each select="*">
-                    <xsl:if test=". != ''">
-                        <xsl:value-of select="normalize-space(.)" />
-                        <xsl:if test="position()!=last()">
-                            <xsl:text> --</xsl:text>
-                        </xsl:if>
-                    </xsl:if>
-                </xsl:for-each>
+                <xsl:value-of select="$subject_text"/>
             </xsl:element>
+          </xsl:if>
         </xsl:if>
     </xsl:template>
+    
     <xsl:template match="m:typeOfResource | m:genre">
+      <xsl:if test="string-length(.) &gt; 0">
         <xsl:element name="field">
             <xsl:attribute name="name">type_of_resource_mt</xsl:attribute>
             <xsl:value-of select="." />
@@ -623,6 +623,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             <xsl:attribute name="name">type_of_resource_facet_ms</xsl:attribute>
             <xsl:value-of select="normalize-space(.)" />
         </xsl:element>
+      </xsl:if>
     </xsl:template>
     <xsl:template match="m:abstract">
         <xsl:choose>

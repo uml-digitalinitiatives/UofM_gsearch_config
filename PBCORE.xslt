@@ -207,7 +207,7 @@
     <xsl:template name="field">
         <xsl:param name="name"/>
         <xsl:param name="value"/>
-        <xsl:if test="not(normalize-space($value)) = ''">
+        <xsl:if test="string-length(normalize-space($value)) &gt; 0">
             <xsl:element name="field">
                 <xsl:attribute name="name">
                     <xsl:value-of select="translate($name, ' ', '_')"/>

@@ -15,13 +15,14 @@
     <xsl:param name="suffix"></xsl:param>
     <!-- Create fields for the set of selected elements, named according to the 'local-name' and containing the 'text' -->
     <xsl:for-each select="./*">
-
-      <xsl:element name="field">
-        <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
-        </xsl:attribute>
-        <xsl:value-of select="text()"/>
-      </xsl:element>
+      <xsl:if test="string-length(normalize-space(.)) &gt; 0">
+        <xsl:element name="field">
+          <xsl:attribute name="name">
+            <xsl:value-of select="concat($prefix, local-name(), $suffix)"/>
+          </xsl:attribute>
+          <xsl:value-of select="text()"/>
+        </xsl:element>
+      </xsl:if>
     </xsl:for-each>
 
   </xsl:template>
