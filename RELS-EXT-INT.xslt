@@ -35,7 +35,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="string-length(normalize-space($value) &gt; 0">
+    <xsl:if test="string-length(normalize-space($value)) &gt; 0">
       <xsl:element name="field">
         <xsl:attribute name="name">
           <xsl:value-of select="concat($prefix, local-name(), '_uri', $suffix)"/>
