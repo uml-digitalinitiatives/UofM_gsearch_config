@@ -26,23 +26,24 @@
     <xsl:param name="suffix">_ms</xsl:param>
     
     <xsl:variable name="value">
+      <!-- Hack the isMemberOfCollection value apart to not mess with Danny Joris's solr views -->
+      <!-- 2018-02-27 - whikloj : Make all PID references except hasModel remove info:fedora/ -->
       <xsl:choose>
-        <xsl:when test="local-name() = 'isMemberOfCollection'">
+        <xsl:when test="starts-with(@rdf:resource, 'info:fedora/') and not(local-name() = 'hasModel')">
           <xsl:value-of select="substring-after(@rdf:resource, '/')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="@rdf:resource"/>
         </xsl:otherwise>
       </xsl:choose>
+      <!-- END OF HACK -->
     </xsl:variable>
     <xsl:if test="string-length(normalize-space($value)) &gt; 0">
       <xsl:element name="field">
         <xsl:attribute name="name">
           <xsl:value-of select="concat($prefix, local-name(), '_uri', $suffix)"/>
         </xsl:attribute>
-        <!-- Hack the isMemberOfCollection value apart to not mess with Danny Joris's solr views -->
         <xsl:value-of select="$value"/>
-        <!-- END OF HACK -->
       </xsl:element>
     </xsl:if>
   </xsl:template>

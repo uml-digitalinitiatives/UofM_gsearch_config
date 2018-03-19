@@ -584,8 +584,16 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <xsl:value-of select="normalize-space(.)" />
             </xsl:element>
         </xsl:for-each>
+        <xsl:for-each select="$cart[string-length(text() | *) &gt; 0]">
+            <xsl:for-each select="m:coordinates">
+                <xsl:call-template name="solr_field">
+                   <xsl:with-param name="field_name">mods_coordinates_ms</xsl:with-param>
+                   <xsl:with-param name="field_value"><xsl:value-of select="text()"/></xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:for-each>
         <!-- slurp up all sub elements of subject into one field, not sure if we need this -->
-        <xsl:if test="*">
+        <xsl:if test="not($cart)">
           <xsl:variable name="subject_text">
             <xsl:for-each select="*">
               <xsl:if test="string-length(normalize-space(.)) &gt; 0">
