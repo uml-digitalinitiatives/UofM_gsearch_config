@@ -1009,6 +1009,18 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
      </xsl:if>
     </xsl:template>
 
+    <!-- Generate a solr field -->
+    <xsl:template name="solr_field">
+      <xsl:param name="field_name"></xsl:param>
+      <xsl:param name="field_value"></xsl:param>
+      <xsl:if test="string-length($field_name) &gt; 0 and string-length($field_value) &gt; 0">
+         <xsl:element name="field">
+             <xsl:attribute name="name"><xsl:value-of select="$field_name"/></xsl:attribute>
+             <xsl:value-of select="$field_value"/>
+         </xsl:element>
+      </xsl:if>
+   </xsl:template>
+
    <!-- This loops through the nodes and prints the values with a comma in front except the first.-->
    <xsl:template name="list_with_commas">
      <xsl:param name="list"/>
