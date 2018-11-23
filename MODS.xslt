@@ -28,13 +28,17 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
   xmlns:m="http://www.loc.gov/mods/v3"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:exsl="http://exslt.org/common"
-  extension-element-prefixes="exsl"
+  xmlns:java="http://xml.apache.org/xalan/java"
+  extension-element-prefixes="exsl java"
   exclude-result-prefixes="foxml m xlink xs exsl">
 
   <xsl:include href="library/xslt-date-template.xslt"/>
   <xsl:include href="library/mods-role-term.xslt"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
+
+  <!-- HashSet to track single-valued fields. -->
+  <xsl:variable name="single_valued_hashset" select="java:java.util.HashSet.new()"/>
 
 <!-- This is left over from the one stylesheet to rule them all format
   <xsl:template match="foxml:datastream[@ID='MODS']/foxml:datastreamVersion[last()]" name="index_MODS">
@@ -67,6 +71,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
 
     <!-- This is the first match for this template, all things flow from here. -->
     <xsl:template match="m:mods">
+        <!-- Clearing hash in case the template is ran more than once. -->
+        <xsl:variable name="return_from_clear" select="java:clear($single_valued_hashset)"/>
+
         <xsl:variable name="form" select="m:physicalDescription/m:form" />
         <xsl:variable name="rform" select="m:physicalDescription/m:reformattingQuality" />
         <xsl:variable name="intm" select="m:physicalDescription/m:internetMediaType" />
@@ -968,33 +975,46 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             </xsl:call-template>
           </xsl:variable>
 
-          <xsl:variable name="fieldName">
+          <xsl:variable name="tmpName">
             <xsl:call-template name="get_all_parents">
               <xsl:with-param name="node" select="."/>
             </xsl:call-template>
           </xsl:variable>
+          <!-- hashes don't work if you store nodesets, make sure this is a string -->
+          <xsl:variable name="fieldName" select="string($tmpName)"/>
 
-          <xsl:if test="normalize-space($textValue)">
-            <xsl:element name="field">
-              <xsl:attribute name="name">
-	        <xsl:choose>
-                  <xsl:when test="@point = 'start'">
-                    <xsl:value-of select="concat($prefix, $fieldName, '_', 'start', '_dt')"/>
-                  </xsl:when>
-                  <xsl:when test="@point = 'end'">
-                    <xsl:value-of select="concat($prefix, $fieldName, '_', 'end', '_dt')"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="concat($prefix, $fieldName, '_dt')"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+          <xsl:if test="java:add($single_valued_hashset, $fieldName)">
+            <xsl:if test="not(normalize-space($textValue)='')">
+              <xsl:element name="field">
+                <xsl:attribute name="name">
+	          <xsl:choose>
+                    <xsl:when test="@point = 'start'">
+                      <xsl:value-of select="concat($prefix, $fieldName, '_', 'start', '_dt')"/>
+                    </xsl:when>
+                    <xsl:when test="@point = 'end'">
+                      <xsl:value-of select="concat($prefix, $fieldName, '_', 'end', '_dt')"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="concat($prefix, $fieldName, '_dt')"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
 
               <!--  <xsl:value-of select="concat($prefix, $fieldName, '_dt')"/> -->
+                </xsl:attribute>
+                <xsl:value-of select="$textValue"/>
+              </xsl:element>
+            </xsl:if>
+          </xsl:if>
+
+          <xsl:if test="not(normalize-space($textValue)='')">
+            <xsl:element name="field">
+              <xsl:attribute name="name">
+                <xsl:value-of select="concat($prefix, $fieldName, '_mdt')"/>
               </xsl:attribute>
               <xsl:value-of select="$textValue"/>
-            </xsl:element>
-          </xsl:if>
-        </xsl:for-each>
+           </xsl:element>
+         </xsl:if>
+       </xsl:for-each>
 
     </xsl:template>
 

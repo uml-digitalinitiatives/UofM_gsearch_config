@@ -5,6 +5,8 @@
 
   <xsl:include href="library/traverse-graph.xslt"/>
 
+  <xsl:variable name="SPARQL_ENDPOINT"><xsl:text>http://localhost:9999/blazegraph/namespace/kb/sparql</xsl:text></xsl:variable>
+
   <!-- Pull both ancestors and Parent Collections -->
   <xsl:template name="get-ancestors-and-collections">
     <!--Pass in the pid-->
@@ -23,6 +25,9 @@
         }
         UNION {
           &lt;%PID_URI%&gt; fre:isMemberOf ?obj .
+        }
+        UNION {
+          &lt;%PID_URI&gt; fre:isPartOf ?obj .
         }
         OPTIONAL {
           ?obj fm:label ?parentTitle .
@@ -53,7 +58,7 @@
         </xsl:with-param>
         <xsl:with-param name="lang">sparql</xsl:with-param>
         <!--<xsl:with-param name="risearch"><xsl:value-of select="concat($PROT, '://', $FEDORAUSER, ':', $FEDORAPASS, '@', $FEDORAURL, $FEDORAPATH, '/risearch')"/></xsl:with-param>-->
-        <xsl:with-param name="risearch"><xsl:value-of select="concat($PROT, '://', $FEDORAUSER, ':', $FEDORAPASS, '@', $FEDORAURL, '/bigdata/namespace/kb/sparql')"/></xsl:with-param>
+        <xsl:with-param name="risearch" select="$SPARQL_ENDPOINT"/>
         <xsl:with-param name="query" select="$query"/>
       </xsl:call-template>
     </xsl:variable>
