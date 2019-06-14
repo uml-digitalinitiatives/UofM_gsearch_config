@@ -3,7 +3,7 @@
   xmlns:sparql="http://www.w3.org/2005/sparql-results#"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:include href="library/traverse-graph.xslt"/>
+  <xsl:include href="traverse-graph.xslt"/>
 
   <xsl:variable name="SPARQL_ENDPOINT"><xsl:text>http://localhost:9999/blazegraph/namespace/kb/sparql</xsl:text></xsl:variable>
 
