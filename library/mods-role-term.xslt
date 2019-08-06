@@ -7,7 +7,7 @@
   xmlns:mods="http://www.loc.gov/mods/v3"
   exclude-result-prefixes="xlink">
 
-  <xsl:include href="library/xslt-string-functions.xslt"/>
+  <xsl:include href="xslt-string-functions.xslt"/>
 
   <xsl:template match="mods:roleTerm" mode="translate">
     <xsl:choose>
