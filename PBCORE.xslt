@@ -182,7 +182,9 @@
             <xsl:text>type_of_resource_facet_ms</xsl:text>
           </xsl:with-param>
           <xsl:with-param name="value">
-            <xsl:value-of select="pb:instantiationMediaType"/>
+            <xsl:call-template name="toProper">
+               <xsl:with-param name="str" select="pb:instantiationMediaType"/>
+            </xsl:call-template>
           </xsl:with-param>
         </xsl:call-template>
         <!-- End Custom facets -->
