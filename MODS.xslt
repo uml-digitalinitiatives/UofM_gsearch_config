@@ -636,7 +636,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
         </xsl:element>
         <xsl:element name="field">
             <xsl:attribute name="name">type_of_resource_facet_ms</xsl:attribute>
-            <xsl:value-of select="normalize-space(.)" />
+            <xsl:call-template name="toProper">
+                <xsl:with-param name="str" select="normalize-space(.)" />
+            </xsl:call-template>
         </xsl:element>
       </xsl:if>
     </xsl:template>
