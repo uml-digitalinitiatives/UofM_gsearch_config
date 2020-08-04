@@ -4,12 +4,22 @@
   
   <xsl:template name="toUpper">
     <xsl:param name="str" />
-    <xsl:value-of select="translate($str,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+    <xsl:variable name="tempStr">
+      <xsl:call-template name="filterNonPrintable">
+        <xsl:with-param name="str" select="$str"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate($tempStr,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
   </xsl:template>
   
   <xsl:template name="toLower">
     <xsl:param name="str" />
-    <xsl:value-of select="translate($str,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+    <xsl:variable name="tempStr">
+      <xsl:call-template name="filterNonPrintable">
+        <xsl:with-param name="str" select="$str"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate($tempStr,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
   </xsl:template>
   
   <xsl:template name="toProper">
@@ -20,4 +30,12 @@
       <xsl:with-param name="str" select="substring($str,2)"/>
     </xsl:call-template>
   </xsl:template>
+
+  <!-- filter out nonprintable characters like:
+  +       8203 - zero-width space -->
+  <xsl:template name="filterNonPrintable">
+    <xsl:param name="str" />
+    <xsl:value-of select="translate($str, '&#8203;', '')" />
+  </xsl:template>
+
 </xsl:stylesheet>

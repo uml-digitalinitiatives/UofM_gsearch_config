@@ -307,7 +307,9 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
             <xsl:attribute name="name">
                 <xsl:text>identifier_mt</xsl:text>
             </xsl:attribute>
-            <xsl:value-of select="." />
+            <xsl:call-template name="filterNonPrintable">
+                <xsl:with-param name="str" select="text()" />
+            </xsl:call-template>
         </xsl:element>
     </xsl:template>
     <xsl:template match="m:name">

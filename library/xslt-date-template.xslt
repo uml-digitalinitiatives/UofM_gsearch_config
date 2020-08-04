@@ -45,12 +45,9 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="asdf" select="string($parsed)"/>
-    <!--<xsl:message><xsl:value-of select="$asdf"/></xsl:message>-->
     <xsl:choose>
     <xsl:when test="java:matches($asdf, $pattern1)">
       <xsl:variable name="dp" select="java:org.joda.time.format.ISODateTimeFormat.dateTimeParser()"/>
-
-      <!--<xsl:message><xsl:value-of select="java:parseDateTime($dp, $parsed)"/></xsl:message>-->
       <xsl:variable name="f" select="java:org.joda.time.format.ISODateTimeFormat.dateTime()"/>
       <xsl:variable name="df" select="java:withZoneUTC($f)"/>
       <xsl:value-of select="java:print($df, java:parseDateTime($dp, $asdf))"/>
