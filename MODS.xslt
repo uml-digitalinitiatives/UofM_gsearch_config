@@ -305,7 +305,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
     <xsl:template match="m:identifier">
         <xsl:element name="field">
             <xsl:attribute name="name">
-                <xsl:text>identifier_mt</xsl:text>
+                <xsl:text>identifier_ms</xsl:text>
             </xsl:attribute>
             <xsl:call-template name="filterNonPrintable">
                 <xsl:with-param name="str" select="text()" />
