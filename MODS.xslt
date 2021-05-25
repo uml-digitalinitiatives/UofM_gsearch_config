@@ -98,12 +98,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <!-- set_spec is handled up above -->
                 <!-- we only want one title sort element -->
                 <xsl:if test="m:titleInfo/m:title">
-                    <xsl:if test="position() = 1">
-                        <xsl:element name="field">
-                            <xsl:attribute name="name">title_sort_ms</xsl:attribute>
-                            <xsl:value-of select="m:titleInfo/m:title" />
-                        </xsl:element>
-                    </xsl:if>
+                    <xsl:element name="field">
+                        <xsl:attribute name="name">title_sort_ms</xsl:attribute>
+                        <xsl:value-of select="m:titleInfo/m:title" />
+                    </xsl:element>
                 </xsl:if>
                 <xsl:if test="m:identifier[@type='pid']">
                     <xsl:if test="position() = 1">
@@ -158,10 +156,10 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <!-- originInfo -->
                 <xsl:apply-templates select="m:originInfo" />
                 <!-- language -->
-                <xsl:if test="m:language/m:languageTerm[@type='text']">
+                <xsl:if test="m:language/m:languageTerm">
                     <xsl:element name="field">
                         <xsl:attribute name="name">language_mt</xsl:attribute>
-                        <xsl:for-each select="m:language/m:languageTerm[@type='text']">
+                        <xsl:for-each select="m:language/m:languageTerm">
                             <xsl:if test=". != ''">
                                 <xsl:if test="position() != 1">
                                     <xsl:text>; </xsl:text>
@@ -170,7 +168,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:element>
-                    <xsl:for-each select="m:language/m:languageTerm[@type='text']">
+                    <xsl:for-each select="m:language/m:languageTerm">
                         <xsl:element name="field">
                             <xsl:attribute name="name">language_facet_ms</xsl:attribute>
                             <xsl:value-of select="normalize-space(.)" />
@@ -513,6 +511,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               <xsl:call-template name="list_with_commas">
                 <xsl:with-param name="list">
                   <xsl:copy-of select="m:country"/>
+                  <xsl:copy-of select="m:territory"/>
                   <xsl:copy-of select="m:province"/>
                   <xsl:copy-of select="m:state"/>
                   <xsl:copy-of select="m:region"/>
@@ -529,25 +528,28 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
               </xsl:element>
             </xsl:if>
             <xsl:if test="m:country and normalize-space(m:country) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_country_facet_ms</xsl:attribute><xsl:value-of select="m:country"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_country_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:country)"/></xsl:element>
+            </xsl:if>
+            <xsl:if test="m:territory and normalize-space(m:territory) != ''">
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_territory_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:territory)"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:region and normalize-space(m:region) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_region_facet_ms</xsl:attribute><xsl:value-of select="m:region"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_region_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:region)"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:province and normalize-space(m:province) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_province_state_facet_ms</xsl:attribute><xsl:value-of select="m:province"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_province_state_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:province)"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:county and normalize-space(m:county) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_county_facet_ms</xsl:attribute><xsl:value-of select="m:county"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_county_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:county)"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:state and normalize-space(m:state) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_province_state_facet_ms</xsl:attribute><xsl:value-of select="m:state"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_province_state_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:state)"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:city and normalize-space(m:city) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_city_facet_ms</xsl:attribute><xsl:value-of select="m:city"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_city_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:city)"/></xsl:element>
             </xsl:if>
             <xsl:if test="m:citySection and normalize-space(m:citySection) != ''">
-              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_citySection_facet_ms</xsl:attribute><xsl:value-of select="m:citySection"/></xsl:element>
+              <xsl:element name="field"><xsl:attribute name="name">hierarchicGeographic_citySection_facet_ms</xsl:attribute><xsl:value-of select="normalize-space(m:citySection)"/></xsl:element>
             </xsl:if>
           </xsl:for-each>
         </xsl:if>
@@ -1053,7 +1055,7 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
           <xsl:if test="position() &gt; 1">
             <xsl:text>, </xsl:text>
           </xsl:if>
-          <xsl:value-of select="text()"/>
+          <xsl:value-of select="normalize-space(text())"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:template>

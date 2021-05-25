@@ -152,22 +152,24 @@
         </xsl:call-template>
 
         <!-- Custom facets -->
-        <xsl:call-template name="field">
-          <xsl:with-param name="name">
-            <xsl:text>language_mt</xsl:text>
-          </xsl:with-param>
-          <xsl:with-param name="value">
-             <xsl:apply-templates select="pb:instantiationLanguage" mode="translate" />
-          </xsl:with-param>
-        </xsl:call-template>
-        <xsl:call-template name="field">
-          <xsl:with-param name="name">
-            <xsl:text>language_facet_ms</xsl:text>
-          </xsl:with-param>
-          <xsl:with-param name="value">
-            <xsl:apply-templates select="pb:instantiationLanguage" mode="translate" />
-          </xsl:with-param>
-        </xsl:call-template>
+        <xsl:for-each select="pb:instantiationLanguage">
+          <xsl:call-template name="field">
+            <xsl:with-param name="name">
+              <xsl:text>language_mt</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="value">
+              <xsl:apply-templates select="." mode="translate" />
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:call-template name="field">
+            <xsl:with-param name="name">
+              <xsl:text>language_facet_ms</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="value">
+              <xsl:apply-templates select="." mode="translate" />
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:for-each>
 
         <xsl:call-template name="field">
           <xsl:with-param name="name">
