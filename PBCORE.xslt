@@ -5,7 +5,7 @@
     exclude-result-prefixes="pb">
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-    <xsl:include href="library/xslt-string-functions.xslt"/>
+    <xsl:include href="library/languages.xslt"/>
 
     <xsl:output method="xml" indent="yes" encoding="UTF-8" omit-xml-declaration="yes"/>
 
@@ -157,7 +157,7 @@
             <xsl:text>language_mt</xsl:text>
           </xsl:with-param>
           <xsl:with-param name="value">
-            <xsl:value-of select="pb:instantiationLanguage"/>
+             <xsl:apply-templates select="pb:instantiationLanguage" mode="translate" />
           </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="field">
@@ -165,7 +165,7 @@
             <xsl:text>language_facet_ms</xsl:text>
           </xsl:with-param>
           <xsl:with-param name="value">
-            <xsl:value-of select="pb:instantiationLanguage"/>
+            <xsl:apply-templates select="pb:instantiationLanguage" mode="translate" />
           </xsl:with-param>
         </xsl:call-template>
 
