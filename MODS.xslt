@@ -98,10 +98,12 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
                 <!-- set_spec is handled up above -->
                 <!-- we only want one title sort element -->
                 <xsl:if test="m:titleInfo/m:title">
-                    <xsl:element name="field">
-                        <xsl:attribute name="name">title_sort_ms</xsl:attribute>
-                        <xsl:value-of select="m:titleInfo/m:title" />
-                    </xsl:element>
+                    <xsl:if test="position() = 1">
+                        <xsl:element name="field">
+                            <xsl:attribute name="name">title_sort_ms</xsl:attribute>
+                            <xsl:value-of select="m:titleInfo/m:title" />
+                        </xsl:element>
+                    </xsl:if>
                 </xsl:if>
                 <xsl:if test="m:identifier[@type='pid']">
                     <xsl:if test="position() = 1">

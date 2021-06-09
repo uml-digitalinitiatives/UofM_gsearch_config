@@ -26,11 +26,17 @@
 
     <xsl:variable name="pattern2">([0-9]{1,2}/)([0-9]{1,2}/)([0-9]{4})</xsl:variable>
     <xsl:variable name="pattern3">([0-9]{1,2}/)?([0-9]{1,2}/)?([0-9]{4}) ([0-9]{1,2}:[0-9]{2})</xsl:variable>
+    <!-- Test for dates that are obviously day/month/year first. -->
+    <xsl:variable name="reverseDate">(1[3-9]|[2-3][0-9])/([0-9]{1,2})/([0-9]{4})</xsl:variable>
 
     <!-- Have JODA or fail silently. -->
 
     <xsl:variable name="parsed">
       <xsl:choose>
+        <xsl:when test="java:matches($date, $reverseDate)">
+          <xsl:variable name="dp" select="java:org.joda.time.format.DateTimeFormat.forPattern('d/M/y')"/>
+          <xsl:value-of select="java:parseDateTime($dp, $date)"/>
+        </xsl:when>
         <xsl:when test="java:matches($date, $pattern2)">
           <xsl:variable name="dp" select="java:org.joda.time.format.DateTimeFormat.forPattern('M/d/y')"/>
           <xsl:value-of select="java:parseDateTime($dp, $date)"/>
