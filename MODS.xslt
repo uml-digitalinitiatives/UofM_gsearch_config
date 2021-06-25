@@ -635,6 +635,15 @@ Copyright 2007, The Digital Library Federation, All Rights Reserved
     </xsl:template>
     
     <xsl:template match="m:typeOfResource | m:genre">
+      <!-- Store type and genre in separate fields -->
+      <xsl:if test="local-name(.) = 'typeOfResource' and string-length(.) &gt; 0">
+        <xsl:element name="field">
+          <xsl:attribute name="name">type_of_resource_ms</xsl:attribute>
+          <xsl:call-template name="toProper">
+              <xsl:with-param name="str" select="normalize-space(.)" />
+          </xsl:call-template>
+        </xsl:element>
+      </xsl:if>
       <xsl:if test="string-length(.) &gt; 0">
         <xsl:element name="field">
             <xsl:attribute name="name">type_of_resource_mt</xsl:attribute>
